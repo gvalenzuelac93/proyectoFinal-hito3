@@ -1,0 +1,140 @@
+.product-gallery {
+    padding: 20px 0;
+  }
+  
+.product-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border-radius: 20px !important;
+}
+  
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+  
+.card-img-wrapper {
+  padding: 20px;
+  background: #fff;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px !important;
+ 
+}
+  
+.card-img-top {
+  max-height: 200px;
+  width: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+  
+.product-card:hover .card-img-top {
+  transform: scale(1.05);
+}
+  
+.product-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  height: 2.4rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+  
+.product-description {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-bottom: 1rem;
+  height: 3rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+  
+.price {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+  
+.btn-primary {
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  
+}
+
+.mi-boton {
+  background-color: #B19CD9 !important; 
+  color: black !important; 
+  border-color: #F2F2F2 !important;
+  transition: background-color 0.3s ease!important;
+}
+
+.mi-boton:hover {
+  background-color: #ffb6c1 !important; 
+}
+
+  
+
+@media (max-width: 768px) {
+.card-img-wrapper {
+  height: 200px;
+  border-radius: 20px !important;
+}
+    
+.card-img-top {
+  max-height: 150px;
+  }
+    
+.product-title {
+  font-size: 1rem;
+  }
+    
+.price {
+  font-size: 1.1rem;
+  }
+}
+
+.card-body{ 
+  border-radius: 20px;
+}
+
+.mi-boton {
+  background-color: #B19CD9 !important; 
+  color: black !important; 
+  border-color: #F2F2F2 !important;
+  transition: background-color 0.3s ease!important;
+}
+
+.mi-boton:hover {
+  background-color: #ffb6c1 !important; 
+}
+
+
+.mi-botonsito {
+  background-color: #ffb6c1 !important; 
+  color: black !important; 
+  border-color: #F2F2F2 !important;
+  transition: background-color 0.3s ease!important;
+}
+
+.mi-boton:hover {
+  background-color:#d8b6ff !important; 
+}
+
+
+.botonlogin {
+  background-color: #ffb6c1 !important; 
+  color: black !important; 
+  border-color: #F2F2F2 !important;
+  transition: background-color 0.3s ease!important;
+}
+
+.botonlogin:hover {
+  background-color: #d8b6ff !important; 
+}
