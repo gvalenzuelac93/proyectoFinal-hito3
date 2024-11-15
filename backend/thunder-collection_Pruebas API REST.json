@@ -1,0 +1,76 @@
+{
+    "clientName": "Thunder Client",
+    "collectionName": "Pruebas API REST",
+    "collectionId": "fc4c6e54-9771-4c09-b410-1c6312e9f1eb",
+    "dateExported": "2024-11-15T05:06:20.971Z",
+    "version": "1.2",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "f924c3c6-2f47-4be3-ba22-64571c9147d0",
+            "colId": "fc4c6e54-9771-4c09-b410-1c6312e9f1eb",
+            "containerId": "",
+            "name": "http://localhost:3000/api/usuarios/registrar",
+            "url": "http://localhost:3000/api/usuarios/registrar",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2024-11-15T05:03:54.612Z",
+            "modified": "2024-11-15T05:03:54.612Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\r\n    \"nombre\": \"Test User 1\",\r\n    \"email\": \"test1@example.com\",\r\n    \"contraseña\": \"password123\"\r\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "6c9a9ddb-8591-4927-b5b2-db2d7a6533ae",
+            "colId": "fc4c6e54-9771-4c09-b410-1c6312e9f1eb",
+            "containerId": "",
+            "name": "http://localhost:3000/api/usuarios/login",
+            "url": "http://localhost:3000/api/usuarios/login",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2024-11-15T05:04:57.437Z",
+            "modified": "2024-11-15T05:04:57.437Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\r\n    \"email\": \"test1@example.com\",\r\n    \"contraseña\": \"password123\"\r\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "48c36ae8-529e-456f-afef-0fd5ca65aa8c",
+            "colId": "fc4c6e54-9771-4c09-b410-1c6312e9f1eb",
+            "containerId": "",
+            "name": "http://localhost:3000/api/productos/search?q=anime",
+            "url": "http://localhost:3000/api/productos/search?q=anime",
+            "method": "GET",
+            "sortNum": 30000,
+            "created": "2024-11-15T05:05:32.318Z",
+            "modified": "2024-11-15T05:05:32.318Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "q",
+                    "value": "anime",
+                    "isPath": false
+                }
+            ]
+        },
+        {
+            "_id": "d4697d24-d2a1-4f80-9b50-8a5e06907556",
+            "colId": "fc4c6e54-9771-4c09-b410-1c6312e9f1eb",
+            "containerId": "",
+            "name": "http://localhost:3000/api/productos",
+            "url": "http://localhost:3000/api/productos",
+            "method": "GET",
+            "sortNum": 40000,
+            "created": "2024-11-15T05:05:55.319Z",
+            "modified": "2024-11-15T05:05:55.319Z",
+            "headers": []
+        }
+    ],
+    "ref": "sVMtljngDGyc0-SGYabQKI4-2Bxr7UiDj81jjJV6Moj6Mrymr6F-DV0Ovh2AtZ5xzL-lek6iiJM6ParRSa1CXQ"
+}
