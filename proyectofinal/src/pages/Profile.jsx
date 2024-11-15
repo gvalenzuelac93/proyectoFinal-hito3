@@ -1,87 +1,91 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 
 const Profile = () => {
-  const { user, updateUser  } = useContext(AuthContext);
-  const [isEditing, setIsEditing] = useState(false);
-  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const { user } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState('profile');
-  const [editedUser , setEditedUser ] = useState({ ...user });
-  const [passwords, setPasswords] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: '',
-  });
+  const [orderHistory, setOrderHistory] = useState([]);
 
-  const handleEditSubmit = async (e) => {
-    e.preventDefault();
-    // Lógica para actualizar el usuario...
+  // Método para obtener el historial de pedidos
+  const fetchOrderHistory = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:3000/api/ordenes', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) throw new Error('Error al obtener el historial de pedidos');
+
+      const data = await response.json();
+      setOrderHistory(data); // Asumiendo que la respuesta es un array de pedidos
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handlePasswordChange = async (e) => {
-    e.preventDefault();
-    // Lógica para cambiar la contraseña...
-  };
+  // Llama a fetchOrderHistory cuando el componente se monta
+  useEffect(() => {
+    if (user) {
+      fetchOrderHistory();
+    }
+  }, [user]);
 
+  // Método para renderizar el historial de pedidos
+  const renderOrderHistory = () => {
+    return (
+      <div>
+        <h3>Historial de Pedidos</h3>
+        {orderHistory.length === 0 ? (
+          <p>No tienes pedidos anteriores.</p>
+        ) : (
+          <ul>
+            {orderHistory.map(order => (
+              <li key={order.id}>
+                <p>ID de Orden: {order.id}</p>
+                <p>Total: ${order.total}</p>
+                <h4>Productos:</h4>
+                {Array.isArray(order.productos) && order.productos.length > 0 ? (
+                  <ul>
+                    {order.productos.map(product => (
+                      <li key={product.producto_id}> {/* Asegúrate de usar la propiedad correcta */}
+                        <p>Producto: {product.titulo}</p> {/* Aquí se muestra el nombre del producto */}
+                        <p>Cantidad: {product.cantidad}</p>
+                        <p>Precio: ${product.precio}</p>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No hay productos en esta orden.</p>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    );
+};
+  // Método para renderizar la información del perfil
   const renderProfile = () => {
     return (
       <div>
         <h3>Información del Perfil</h3>
-        <form onSubmit={handleEditSubmit}>
-          <input
-            type="text"
-            value={editedUser .nombre || ''}
-            onChange={(e) => setEditedUser ({ ...editedUser , nombre: e.target.value })}
-            placeholder="Nombre"
-            required
-          />
-          <input
-            type="email"
-            value={editedUser .email || ''}
-            onChange={(e) => setEditedUser ({ ...editedUser , email: e.target.value })}
-            placeholder="Correo electrónico"
-            required
-          />
-          <button type="submit">Actualizar</button>
-        </form>
-        <button onClick={() => setIsEditing(!isEditing)}>
-          {isEditing ? 'Cancelar' : 'Editar'}
-        </button>
+        <p><strong>Nombre:</strong> {user.nombre}</p>
+        <p><strong>Email:</strong> {user.email}</p>
+        {/* Aquí puedes agregar campos para editar la información del perfil */}
       </div>
     );
   };
 
-  const renderOrderHistory = () => {
-    // Lógica para renderizar el historial de pedidos...
-    return <div>Historial de Pedidos</div>;
-  };
-
+  // Método para renderizar el cambio de contraseña
   const renderChangePassword = () => {
     return (
-      <form onSubmit={handlePasswordChange}>
-        <input
-          type="password"
-          placeholder="Contraseña actual"
-          value={passwords.currentPassword}
-          onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Nueva contraseña"
-          value={passwords.newPassword}
-          onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Confirmar nueva contraseña"
-          value={passwords.confirmPassword}
-          onChange={(e) => setPasswords({ ...passwords, confirmPassword: e.target.value })}
-          required
-        />
-        <button type="submit">Cambiar Contraseña</button>
-      </form>
+      <div>
+        <h3>Cambiar Contraseña</h3>
+        {/* Aquí puedes agregar un formulario para cambiar la contraseña */}
+      </div>
     );
   };
 

@@ -42,8 +42,8 @@ const loginUsuario = async (req, res) => {
         }
 
         // Asegúrate de que el rol esté incluido aquí
-        const { id, nombre, rol } = user.rows[0]; // Asegúrate de que el rol esté disponible
-        res.json({ user: { id, nombre, role: rol } }); // Envolver en un objeto user
+        const { id, nombre, rol, email: userEmail } = user.rows[0];
+        res.json({ user: { id, nombre, rol, email: userEmail } });
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
         res.status(500).json({ error: 'Error iniciando sesión' });

@@ -29,17 +29,16 @@ const Login = () => {
             }),
         });
 
+        const data = await response.json();
+        console.log('Respuesta del servidor:', data); // Asegúrate de que esto muestre el rol
+
         if (!response.ok) {
-            const errorData = await response.json();
-            console.error('Error en el inicio de sesión:', errorData);
-            throw new Error('Error en el inicio de sesión');
+            console.error('Error en el inicio de sesión:', data);
+            throw new Error(data.error || 'Error en el inicio de sesión');
         }
 
-        const data = await response.json();
-        console.log('Respuesta del servidor:', data); // Agrega esta línea para ver la respuesta
-
         // Verificación de que el usuario y su rol están definidos
-        if (!data.user || !data.user.role) {
+        if (!data.user || !data.user.rol) {
             throw new Error('Usuario no encontrado o sin rol');
         }
 
@@ -49,7 +48,7 @@ const Login = () => {
         alert('Inicio de sesión exitoso');
 
         // Redirigir según el rol del usuario
-        if (data.user.role === 'admin') {
+        if (data.user.rol === 'admin') {
             navigate('/admin'); // Redirigir al panel de administración
         } else {
             navigate('/profile'); // Redirigir a la página de perfil del usuario

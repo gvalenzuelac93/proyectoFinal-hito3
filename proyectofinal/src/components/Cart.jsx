@@ -21,41 +21,46 @@ const Cart = () => {
       calculateTotal();
   }, [cart]);
 
-    const handleProceedToCheckout = async () => {
-        if (!user) {
-            alert('Por favor, inicia sesión para continuar con la compra');
-            navigate('/login');
-        } else {
-            setIsProcessingOrder(true);
-            const orderData = {
-                items: cart,
-                total: totalPrice,
-            };
+  const handleProceedToCheckout = async () => {
+    if (!user) {
+        alert('Por favor, inicia sesión para continuar con la compra');
+        navigate('/login');
+    } else {
+        setIsProcessingOrder(true);
+        const orderData = {
+            items: cart,
+            total: totalPrice,
+        };
 
-            try {
-                const token = localStorage.getItem('token');
-                const response = await fetch('http://localhost:3000/api/ordenes', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`,
-                    },
-                    body: JSON.stringify(orderData),
-                });
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch('http://localhost:3000/api/ordenes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify(orderData),
+            });
 
-                if (!response.ok) throw new Error('Error al procesar la orden');
+            if (!response.ok) throw new Error('Error al procesar la orden');
 
-                const order = await response.json();
-                alert(`Orden procesada exitosamente. ID: ${order.id}`);
-                clearCart(); // Limpiar el carrito después de la compra
-                navigate('/orders'); // Redirigir a la página de órdenes
-            } catch (error) {
-                alert(error.message);
-            } finally {
-                setIsProcessingOrder(false);
-            }
+            const order = await response.json();
+            alert(`Orden procesada exitosamente. ID: ${order.id}`);
+            clearCart(); // Limpiar el carrito después de la compra
+
+            // Redirigir a la página de perfil y abrir la pestaña de historial de pedidos
+            navigate('/profile');
+            // Aquí podrías usar un contexto o un estado global para indicar que se debe mostrar el historial de pedidos
+            // Por ejemplo, si tienes un contexto de ordenes, podrías actualizarlo aquí.
+
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            setIsProcessingOrder(false);
         }
-    };
+    }
+};
 
     // Funciones para aumentar y disminuir la cantidad
     const increaseQuantity = (id) => {

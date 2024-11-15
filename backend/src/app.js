@@ -5,6 +5,7 @@ const productosRoutes = require('./routes/productos');
 const usuariosRoutes = require('./routes/usuarios');
 const carritoRoutes = require('./routes/carrito');
 const imagenesProductosRoutes = require('./routes/imagenesProductos');
+const ordenesRoutes = require('./routes/ordenes');
 
 const app = express();
 app.use(bodyParser.json());
@@ -16,5 +17,6 @@ app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/productos', productosRoutes); // Asegúrate de que esta línea esté correcta
 app.use('/api/carrito', carritoRoutes);
 app.use('/api/imagenesproductos', imagenesProductosRoutes);
+app.use('/api/ordenes', ordenesRoutes);
 
 module.exports = app;
