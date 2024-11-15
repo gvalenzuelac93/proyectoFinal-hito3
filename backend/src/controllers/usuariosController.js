@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 
 // Registrar un nuevo usuario
 const registrarUsuario = async (req, res) => {
-    const { nombre, email, contraseña } = req.body;
+    const { nombre, email, contraseña, rol } = req.body; // Asegúrate de que el rol esté en la solicitud
 
     if (!nombre || !email || !contraseña) {
         return res.status(400).json({ error: 'Todos los campos son requeridos' });
@@ -11,9 +11,9 @@ const registrarUsuario = async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(contraseña, 10);
-        const newUser  = await pool.query(
-            'INSERT INTO usuarios (nombre, email, contraseña) VALUES ($1, $2, $3) RETURNING *',
-            [nombre, email, hashedPassword]
+        const newUser   = await pool.query(
+            'INSERT INTO usuarios (nombre, email, contraseña, rol) VALUES ($1, $2, $3, $4) RETURNING *',
+            [nombre, email, hashedPassword, rol || 'user'] // Asigna 'user' si no se proporciona rol
         );
         res.status(201).json(newUser .rows[0]);
     } catch (error) {
@@ -41,8 +41,9 @@ const loginUsuario = async (req, res) => {
             return res.status(400).json({ error: 'Contraseña incorrecta' });
         }
 
+        // Asegúrate de que el rol esté incluido aquí
         const { id, nombre, rol } = user.rows[0]; // Asegúrate de que el rol esté disponible
-        res.json({ id, nombre, rol });
+        res.json({ user: { id, nombre, role: rol } }); // Envolver en un objeto user
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
         res.status(500).json({ error: 'Error iniciando sesión' });

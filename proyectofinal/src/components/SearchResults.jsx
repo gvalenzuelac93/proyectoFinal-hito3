@@ -13,30 +13,27 @@ const SearchResults = () => {
 
   useEffect(() => {
     const fetchResults = async () => {
-      if (!query) return;
+        if (!query) return;
 
-      setLoading(true);
-      setError(null);
+        setLoading(true);
+        setError(null);
 
-      try {
-        const response = await fetch(`http://localhost:3000/api/productos/search?q=${encodeURIComponent(query)}`);
-        if (!response.ok) throw new Error('Error al buscar productos');
+        try {
+            const response = await fetch(`http://localhost:3000/api/productos/search?q=${encodeURIComponent(query)}`);
+            if (!response.ok) throw new Error('Error al buscar productos');
 
-        const searchResults = await response.json();
-        if (!Array.isArray(searchResults)) {
-          throw new Error('La respuesta de la API no es un arreglo');
+            const searchResults = await response.json();
+            setResults(searchResults);
+        } catch (err) {
+            setError(`Error al buscar productos: ${err.message}`);
+            console.error('Search error:', err);
+        } finally {
+            setLoading(false);
         }
-        setResults(searchResults);
-      } catch (err) {
-        setError(`Error al buscar productos: ${err.message}`);
-        console.error('Search error:', err);
-      } finally {
-        setLoading(false);
-      }
     };
 
     fetchResults();
-  }, [query]);
+}, [query]);
 
   const handleSort = (value) => {
     setSortBy(value);

@@ -16,44 +16,48 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault(); // Evita el comportamiento por defecto del formulario
-    console.log(formData); // Verifica que los datos sean correctos
 
     try {
-      const response = await fetch('http://localhost:3000/api/usuarios/login', {
-        method: 'POST', // Asegúrate de que el método sea POST
-        headers: {
-          'Content-Type': 'application/json', // Establece el tipo de contenido
-        },
-        body: JSON.stringify({
-          email: formData.email, // Asegúrate de que estos campos sean correctos
-          contraseña: formData.contraseña,
-        }),
-      });
+        const response = await fetch('http://localhost:3000/api/usuarios/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: formData.email,
+                contraseña: formData.contraseña,
+            }),
+        });
 
-      // Manejo de errores de respuesta
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Error en el inicio de sesión:', errorData);
-        throw new Error('Error en el inicio de sesión');
-      }
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Error en el inicio de sesión:', errorData);
+            throw new Error('Error en el inicio de sesión');
+        }
 
-      const data = await response.json();
-      localStorage.setItem('token', data.token); // Guardar el token en el localStorage
-      login(data.user); // Llamar a la función de login del contexto
+        const data = await response.json();
+        console.log('Respuesta del servidor:', data); // Agrega esta línea para ver la respuesta
 
-      alert('Inicio de sesión exitoso');
+        // Verificación de que el usuario y su rol están definidos
+        if (!data.user || !data.user.role) {
+            throw new Error('Usuario no encontrado o sin rol');
+        }
 
-      // Redirigir según el rol del usuario
-      if (data.user.role === 'admin') {
-        navigate('/admin'); // Redirigir al panel de administración
-      } else {
-        navigate('/profile'); // Redirigir a la página de perfil del usuario
-      }
+        localStorage.setItem('token', data.token); // Guardar el token en el localStorage
+        login(data.user); // Llamar a la función de login del contexto
+
+        alert('Inicio de sesión exitoso');
+
+        // Redirigir según el rol del usuario
+        if (data.user.role === 'admin') {
+            navigate('/admin'); // Redirigir al panel de administración
+        } else {
+            navigate('/profile'); // Redirigir a la página de perfil del usuario
+        }
     } catch (error) {
-      alert(error.message); // Muestra cualquier error que ocurra
+        alert(error.message); // Muestra cualquier error que ocurra
     }
-  };
-
+};
   return (
     <div className="container mt-4">
       <h2>Iniciar Sesión</h2>

@@ -18,8 +18,8 @@ const Navbar = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
-      setSearchTerm('');
+      navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`); // Redirige a la búsqueda
+      setSearchTerm(''); // Limpia el campo de búsqueda
     }
   };
 
