@@ -15,7 +15,7 @@ const Login = () => {
   };
 
   const handleLogin = async (e) => {
-    e.preventDefault(); // Evita el comportamiento por defecto del formulario
+    e.preventDefault();
 
     try {
         const response = await fetch('http://localhost:3000/api/usuarios/login', {
@@ -30,14 +30,14 @@ const Login = () => {
         });
 
         const data = await response.json();
-        console.log('Respuesta del servidor:', data); // Asegúrate de que esto muestre el rol
+
+        console.log("Respuesta del servidor:", data); // Agrega este log
 
         if (!response.ok) {
-            console.error('Error en el inicio de sesión:', data);
             throw new Error(data.error || 'Error en el inicio de sesión');
         }
 
-        // Verificación de que el usuario y su rol están definidos
+        // Verifica que el rol esté presente en la respuesta
         if (!data.user || !data.user.rol) {
             throw new Error('Usuario no encontrado o sin rol');
         }
@@ -54,7 +54,7 @@ const Login = () => {
             navigate('/profile'); // Redirigir a la página de perfil del usuario
         }
     } catch (error) {
-        alert(error.message); // Muestra cualquier error que ocurra
+        alert(error.message);
     }
 };
   return (

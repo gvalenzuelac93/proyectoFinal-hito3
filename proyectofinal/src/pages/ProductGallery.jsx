@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './ProductGallery.css';
+import './ProductGallery.css'; // Asegúrate de que este archivo exista
+import ProductCard from '../components/ProductCard';
 
 const ProductGallery = ({ limit }) => {
     const [products, setProducts] = useState([]);
@@ -13,7 +14,7 @@ const ProductGallery = ({ limit }) => {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch('http://localhost:3000/api/productos');
+                const response = await fetch('http://localhost:3000/api/productos'); // Asegúrate de que esta URL sea correcta
                 if (!response.ok) throw new Error('Error al cargar los productos');
 
                 const data = await response.json();
@@ -56,16 +57,9 @@ const ProductGallery = ({ limit }) => {
         <div className='container'>
             <div className="product-gallery">
                 <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                    {products.map(( product) => (
+                    {products.map((product) => (
                         <div className="col" key={product.id}>
-                            <div className="card">
-                                <img src={product.image} className="card-img-top" alt={product.titulo} />
-                                <div className="card-body">
-                                    <h5 className="card-title">{product.titulo}</h5>
-                                    <p className="card-text">${product.precio}</p>
-                                    <button className="btn btn-primary" onClick={() => navigate(`/product/${product.id}`)}>Ver Detalles</button>
-                                </div>
-                            </div>
+                            <ProductCard product={product} />
                         </div>
                     ))}
                 </div>

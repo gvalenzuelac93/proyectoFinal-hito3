@@ -1,4 +1,3 @@
-// App.js
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -17,31 +16,33 @@ import Header from './components/Header';
 import PrivateRoute from './components/PrivateRoute';
 
 function App() {
-  return (
-    <Router>
-      <div className="d-flex flex-column min-vh-100">
-        <Header />
-        <Navbar />
-        <main className="flex-grow-1">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/gallery" element={<ProductGallery />} />
-            <Route path="/search" element={<SearchResults />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/acerca-de" element={<AcercaDe />} />
-            <Route path="/contacto" element={<Contacto />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
-  );
+    return (
+        <Router>
+            <div className="d-flex flex-column min-vh-100">
+                <Header />
+                <Navbar />
+                <main className="flex-grow-1">
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route 
+                path="/admin" 
+                element={<PrivateRoute element={<Admin />} adminOnly={true} />} 
+            />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/gallery" element={<ProductGallery />} />
+                        <Route path="/search" element={<SearchResults />} />
+                        <Route path="/product/:id" element={<ProductDetail />} />
+                        <Route path="/cart" element={<Cart />} />
+                        <Route path="/profile" element={<Profile />} />
+                        <Route path="/acerca-de" element={<AcercaDe />} />
+                        <Route path="/contacto" element={<Contacto />} />  
+                    </Routes>
+                </main>
+                <Footer />
+            </div>
+        </Router>
+    );
 }
 
 export default App;
-

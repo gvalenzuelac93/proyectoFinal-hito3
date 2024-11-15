@@ -1,28 +1,23 @@
-// src/context/AuthContext.jsx
 import React, { createContext, useState } from 'react';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser ] = useState(null);
+    const [user, setUser ] = useState(null);
 
-  const login = (userData) => {
-    setUser (userData); // Asegúrate de que userData incluya el rol y el correo
-  };
+    const login = (userData) => {
+        setUser (userData);
+        localStorage.setItem('token', userData.token);
+    };
 
-  const logout = () => {
-    setUser (null);
-  };
+    const logout = () => {
+        setUser (null);
+        localStorage.removeItem('token');
+    };
 
-  const value = {
-    user,
-    login,
-    logout
-  };
-
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+    return (
+        <AuthContext.Provider value={{ user, login, logout }}>
+            {children}
+        </AuthContext.Provider>
+    );
 };

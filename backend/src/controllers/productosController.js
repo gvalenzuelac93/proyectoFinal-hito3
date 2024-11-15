@@ -2,14 +2,30 @@ const pool = require('../config/db');
 
 // Crear un nuevo producto
 const crearProducto = async (req, res) => {
-    const { titulo, descripcion, precio, categoria } = req.body;
+    const { title, description, price, category, image } = req.body; // Asegúrate de incluir "image"
+
+    // Validar que todos los campos estén presentes
+    if (!title || !description || !price || !category || !image) {
+        return res.status(400).json({ error: 'Todos los campos son requeridos' });
+    }
 
     try {
-        const newProduct = await pool.query(
+        // Crear el producto
+        const newProductResult = await pool.query(
             'INSERT INTO productos (titulo, descripcion, precio, categoria) VALUES ($1, $2, $3, $4) RETURNING *',
-            [titulo, descripcion, precio, categoria]
+            [title, description, price, category]
         );
-        res.status(201).json(newProduct.rows[0]);
+
+        const newProduct = newProductResult.rows[0];
+
+        // Agregar la imagen a la tabla imagenesproductos
+        await pool.query(
+            'INSERT INTO imagenesproductos (producto_id, url) VALUES ($1, $2)',
+            [newProduct.id, image]
+        );
+
+        // Devolver el producto creado con la imagen
+        res.status(201).json({ ...newProduct, imagen: image });
     } catch (error) {
         console.error('Error creando producto:', error);
         res.status(500).json({ error: 'Error creando producto' });
@@ -19,14 +35,21 @@ const crearProducto = async (req, res) => {
 // Obtener todos los productos
 const obtenerProductos = async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM productos');
-        res.json(result.rows);
+        const result = await pool.query(`
+            SELECT p.*, i.url AS imagen_url
+            FROM productos p
+            LEFT JOIN imagenesproductos i ON p.id = i.producto_id
+        `);
+        const productos = result.rows.map(producto => ({
+            ...producto,
+            imagen: producto.imagen_url // Asegúrate de que esta propiedad se llama 'imagen'
+        }));
+        res.json(productos);
     } catch (error) {
         console.error('Error obteniendo productos:', error);
         res.status(500).json({ error: 'Error obteniendo productos' });
     }
 };
-
 // Obtener producto por ID
 const obtenerProductoPorId = async (req, res) => {
     const { id } = req.params;

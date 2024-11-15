@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 
 const Admin = () => {
@@ -12,10 +12,11 @@ const Admin = () => {
     image: '',
     category: ''
   });
+  const [imagePreview, setImagePreview] = useState('');
 
-  if (!user || user.role !== 'admin') {
+  if (!user || user.rol !== 'admin') {
     return <p>No tienes permiso para ver esta página.</p>;
-  }
+}
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -31,9 +32,10 @@ const Admin = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setNewProduct(prev => ({
-          ...prev ,
+          ...prev,
           image: reader.result
         }));
+        setImagePreview(reader.result); // Setear la vista previa de la imagen
       };
       reader.readAsDataURL(file);
     }
@@ -41,19 +43,20 @@ const Admin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Datos del nuevo producto:', newProduct); // Agrega este log
     try {
-      const response = await fetch('http://localhost:3000/api/productos/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify(newProduct),
-      });
+        const response = await fetch('http://localhost:3000/api/productos/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(newProduct),
+        });
 
-      if (!response.ok) throw new Error('Error al agregar el producto');
+        if (!response.ok) throw new Error('Error al agregar el producto');
 
-      const product = await response.json();
+        const product = await response.json();
       setProducts(prev => [...prev, product]);
       setNewProduct({
         title: '',
@@ -62,6 +65,7 @@ const Admin = () => {
         image: '',
         category: ''
       });
+      setImagePreview(''); // Resetear la vista previa
       setShowForm(false);
       alert('Producto agregado exitosamente');
     } catch (error) {
@@ -87,25 +91,82 @@ const Admin = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const response = await fetch('http://localhost:3000/api/productos');
+      const data = await response.json();
+      setProducts(data);
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
     <div className="container mt-4">
       <h2>Panel de Administración</h2>
-      <button onClick={() => setShowForm(!showForm)}>{showForm ? 'Cancelar' : 'Agregar Producto'}</button>
+      <button className="btn btn-primary mb-3" onClick={() => setShowForm(!showForm)}>
+        {showForm ? 'Cancelar' : 'Agregar Producto'}
+      </button>
       {showForm && (
-        <form onSubmit={handleSubmit}>
-          <input type="text" name="title" placeholder="Título" value={newProduct.title} onChange={handleInputChange} required />
-          <textarea name="description" placeholder="Descripción" value={newProduct.description} onChange={handleInputChange} required />
-          <input type="number" name="price" placeholder="Precio" value={newProduct.price} onChange={handleInputChange} required />
-          <input type="file" onChange={handleImageChange} required />
-          <input type="text" name="category" placeholder="Categoría" value={newProduct.category} onChange={handleInputChange} required />
-          <button type="submit">Agregar</button>
-        </form>
+        <form onSubmit={handleSubmit} className="mb-4">
+        <input 
+            type="text" 
+            name="title" 
+            placeholder="Título" 
+            value={newProduct.title} 
+            onChange={handleInputChange} 
+            required 
+            className="form-control mb-2"
+        />
+        <textarea 
+            name="description" 
+            placeholder="Descripción" 
+            value={newProduct.description} 
+            onChange={handleInputChange} 
+            required 
+            className="form-control mb-2"
+        />
+        <input 
+            type="number" 
+            name="price" 
+            placeholder="Precio" 
+            value={newProduct.price} 
+            onChange={handleInputChange} 
+            required 
+            className="form-control mb-2"
+        />
+        <input 
+            type="text" // Cambiado a tipo "text" para URL
+            name="image" 
+            placeholder="URL de la Imagen" // Cambiado para indicar que se espera una URL
+            value={newProduct.image} 
+            onChange={handleInputChange} 
+            required 
+            className="form-control mb-2"
+        />
+        <input 
+            type="text" 
+            name="category" 
+            placeholder="Categoría" 
+            value={newProduct.category} 
+            onChange={handleInputChange} 
+            required 
+            className="form-control mb-2"
+        />
+        <button type="submit" className="btn btn-success">Agregar Producto</button>
+    </form>
       )}
       <h3>Lista de Productos</h3>
-      <ul>
+      <ul className="list-group">
         {products.map(product => (
-          <li key={product.id}>
-            {product.title} - {product.price} <button onClick={() => handleDelete(product.id)}>Eliminar</button>
+          <li key={product.id} className="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <h5>{product.titulo}</h5>
+              <p>{product.descripcion}</p>
+              <p>Precio: ${product.precio}</p>
+              <p>Categoría: {product.categoria}</p>
+            </div>
+            <button className="btn btn-danger" onClick={() => handleDelete(product.id)}>Eliminar</button>
           </li>
         ))}
       </ul>

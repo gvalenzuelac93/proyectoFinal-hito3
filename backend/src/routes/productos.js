@@ -16,11 +16,11 @@ const router = express.Router();
 router.get('/search', buscarProductos); // Ruta para buscar productos
 
 // Rutas de productos
-router.post('/', crearProducto); // Crear un nuevo producto
+router.post('/add', crearProducto); // Crear un nuevo producto
 router.get('/', obtenerProductos); // Obtener todos los productos
 router.get('/:id', obtenerProductoPorId); // Obtener un producto por ID
 router.put('/:id', actualizarProducto); // Actualizar un producto
-router.delete('/:id', eliminarProducto); // Eliminar un producto
+router.delete('/delete/:id', eliminarProducto); // Eliminar un producto
 
 // Rutas para manejar imágenes de productos
 router.post('/imagenes', agregarImagen); // Agregar imagen a un producto
