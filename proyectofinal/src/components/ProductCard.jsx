@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const ProductCard = ({ product }) => {
-    // Asegúrate de que 'imagen' sea la propiedad correcta que contiene la URL de la imagen
+    
     const imagenUrl = product.imagen || 'ruta/a/imagen/predeterminada.jpg'; // Imagen predeterminada
 
     return (
