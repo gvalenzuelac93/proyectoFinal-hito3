@@ -1,9 +1,13 @@
 const pool = require('../config/db');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const jwt_decode = require('jwt-decode'); // Asegúrate de instalar esta dependencia
+
+const JWT_SECRET = 'tu_secreto'; // Cambia esto a un secreto más seguro y mantenlo privado
 
 // Registrar un nuevo usuario
 const registrarUsuario = async (req, res) => {
-    const { nombre, email, contraseña, rol } = req.body; // Asegúrate de que el rol esté en la solicitud
+    const { nombre, email, contraseña, rol } = req.body;
 
     if (!nombre || !email || !contraseña) {
         return res.status(400).json({ error: 'Todos los campos son requeridos' });
@@ -11,9 +15,9 @@ const registrarUsuario = async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(contraseña, 10);
-        const newUser   = await pool.query(
+        const newUser  = await pool.query(
             'INSERT INTO usuarios (nombre, email, contraseña, rol) VALUES ($1, $2, $3, $4) RETURNING *',
-            [nombre, email, hashedPassword, rol || 'user'] // Asigna 'user' si no se proporciona rol
+            [nombre, email, hashedPassword, rol || 'user']
         );
         res.status(201).json(newUser .rows[0]);
     } catch (error) {
@@ -41,13 +45,32 @@ const loginUsuario = async (req, res) => {
             return res.status(400).json({ error: 'Contraseña incorrecta' });
         }
 
-        // Asegúrate de que el rol esté incluido aquí
-        const { id, nombre, rol, email: userEmail } = user.rows[0];
-        res.json({ user: { id, nombre, rol, email: userEmail } });
+        const { id, nombre, rol } = user.rows[0];
+        // Generar el token
+        const token = jwt.sign({ id, nombre, rol, email }, JWT_SECRET, { expiresIn: '1h' });
+
+        // Enviar el token y la información del usuario al cliente
+        res.json({ token, user: { id, nombre, rol, email } });
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
         res.status(500).json({ error: 'Error iniciando sesión' });
     }
+};
+
+// Middleware para verificar el token
+const verificarToken = (req, res, next) => {
+    const token = req.headers['authorization']?.split(' ')[1]; // Obtener el token del encabezado Authorization
+    if (!token) {
+        return res.status(403).json({ error: 'Token no proporcionado' });
+    }
+
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+        if (err) {
+            return res.status(401).json({ error: 'Token inválido' });
+        }
+        req.user = decoded; // Guardar la información del usuario decodificada en la solicitud
+        next();
+    });
 };
 
 // Obtener todos los usuarios (solo para admin)
@@ -82,7 +105,7 @@ const actualizarUsuario = async (req, res) => {
 
         res.json(result.rows[0]);
     } catch (error) {
-        console.error('Error actualizando usuario:', error);
+        console.error('Error actualizando usuario:', error); 
         res.status(500).json({ error: 'Error actualizando usuario' });
     }
 };
@@ -92,13 +115,13 @@ const eliminarUsuario = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const result = await pool.query('DELETE FROM usuarios WHERE id = $1', [id]);
-        
-        if (result.rowCount === 0) {
+        const result = await pool.query('DELETE FROM usuarios WHERE id = $1 RETURNING *', [id]);
+
+        if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Usuario no encontrado' });
         }
 
-        res.status(204).send(); // No content
+        res.json({ message: 'Usuario eliminado', usuario: result.rows[0] });
     } catch (error) {
         console.error('Error eliminando usuario:', error);
         res.status(500).json({ error: 'Error eliminando usuario' });
@@ -108,7 +131,8 @@ const eliminarUsuario = async (req, res) => {
 module.exports = {
     registrarUsuario,
     loginUsuario,
+    verificarToken,
     obtenerUsuarios,
     actualizarUsuario,
-    eliminarUsuario
+    eliminarUsuario,
 };

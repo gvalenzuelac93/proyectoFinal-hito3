@@ -80,14 +80,14 @@ const Profile = () => {
   };
 
   // Método para renderizar el cambio de contraseña
-  const renderChangePassword = () => {
-    return (
-      <div>
-        <h3>Cambiar Contraseña</h3>
-        {/* Aquí puedes agregar un formulario para cambiar la contraseña */}
-      </div>
-    );
-  };
+  // const renderChangePassword = () => {
+  //   return (
+  //     <div>
+  //       <h3>Cambiar Contraseña</h3>
+  //       {/* Aquí puedes agregar un formulario para cambiar la contraseña */}
+  //     </div>
+  //   );
+  // };
 
   return (
     <div className="container mt-4">
@@ -95,11 +95,11 @@ const Profile = () => {
       <div className="nav nav-tabs" role="tablist">
         <button className={`nav-link ${activeTab === 'profile' ? 'active' : ''}`} onClick={() => setActiveTab('profile')}>Perfil</button>
         <button className={`nav-link ${activeTab === 'orders' ? 'active' : ''}`} onClick={() => setActiveTab('orders')}>Historial de Pedidos</button>
-        <button className={`nav-link ${activeTab === 'changePassword' ? 'active' : ''}`} onClick={() => setActiveTab('changePassword')}>Cambiar Contraseña</button>
+         {/* <button className={`nav-link ${activeTab === 'changePassword' ? 'active' : ''}`} onClick={() => setActiveTab('changePassword')}>Cambiar Contraseña</button> */}
       </div>
       {activeTab === 'profile' && renderProfile()}
       {activeTab === 'orders' && renderOrderHistory()}
-      {activeTab === 'changePassword' && renderChangePassword()}
+      {/* {activeTab === 'changePassword' && renderChangePassword()} */}
     </div>
   );
 };

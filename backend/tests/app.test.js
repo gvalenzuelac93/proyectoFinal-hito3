@@ -1,6 +1,6 @@
 const request = require('supertest');
-const app = require('./src/app'); // Asegúrate de que la ruta sea correcta
-const pool = require('./src/config/db');
+const app = require('../src/app'); 
+const pool = require('../src/config/db');
 
 describe('API REST Tests', () => {
     afterAll(async () => {
@@ -24,7 +24,7 @@ describe('API REST Tests', () => {
         const response = await request(app)
             .post('/api/usuarios/login')
             .send({
-                email: 'cami@ejemplo.com', // Asegúrate de que este usuario exista
+                email: 'cami@ejemplo.com', 
                 contraseña: '123456',
             });
 
@@ -34,7 +34,7 @@ describe('API REST Tests', () => {
 
     it('should search for a product', async () => {
       const response = await request(app)
-          .get('/api/productos/search?q=anime'); // Cambia 'nombre_del_producto' por un nombre de producto válido
+          .get('/api/productos/search?q=anime'); 
 
       expect(response.statusCode).toBe(200); // Verifica que el código de estado sea 200
       expect(Array.isArray(response.body)).toBe(true); // Verifica que se devuelva un array
