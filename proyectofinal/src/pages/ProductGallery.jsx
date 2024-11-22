@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './ProductGallery.css'; // Asegúrate de que este archivo exista
+import './ProductGallery.css';
 import ProductCard from '../components/ProductCard';
+import { fetchData } from "../services/api";
 
 const ProductGallery = ({ limit }) => {
     const [products, setProducts] = useState([]);
@@ -14,11 +15,10 @@ const ProductGallery = ({ limit }) => {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch('http://localhost:3000/api/productos'); // Asegúrate de que esta URL sea correcta
+                const response = await fetchData('api/productos');
                 if (!response.ok) throw new Error('Error al cargar los productos');
 
                 const data = await response.json();
-                console.log('Datos recibidos:', data); // Para depuración
                 setProducts(data);
             } catch (err) {
                 setError('Error al cargar los productos. Por favor, intente nuevamente.');

@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { fetchData } from "../services/api";
 
 const Admin = () => {
   const { user } = useContext(AuthContext);
@@ -45,7 +46,7 @@ const Admin = () => {
     e.preventDefault();
     console.log('Datos del nuevo producto:', newProduct); // Agrega este log
     try {
-        const response = await fetch('http://localhost:3000/api/productos/add', {
+        const response = await fetchData('api/productos/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -75,7 +76,7 @@ const Admin = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/productos/delete/${id}`, {
+      const response = await fetch(`api/productos/delete/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -93,7 +94,7 @@ const Admin = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await fetch('http://localhost:3000/api/productos');
+      const response = await fetch('api/productos');
       const data = await response.json();
       setProducts(data);
     };

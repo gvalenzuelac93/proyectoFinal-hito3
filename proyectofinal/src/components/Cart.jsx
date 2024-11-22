@@ -2,6 +2,7 @@ import React, { useContext, useMemo, useState, useEffect } from 'react';
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { fetchData } from "../services/api";
 
 const Cart = () => {
     const { cart, removeFromCart, clearCart, updateQuantity } = useContext(CartContext);
@@ -34,7 +35,7 @@ const Cart = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:3000/api/ordenes', {
+            const response = await fetchData('api/ordenes', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

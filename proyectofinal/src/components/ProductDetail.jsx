@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
+import { fetchData } from "../services/api";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -14,7 +15,7 @@ const ProductDetail = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`http://localhost:3000/api/productos/${id}`);
+        const response = await fetchData(`api/productos/${id}`);
         if (!response.ok) throw new Error('Producto no encontrado');
 
         const data = await response.json();

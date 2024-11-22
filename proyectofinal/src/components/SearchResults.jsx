@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { sortResults } from '../services/searchService';
+import { fetchData } from "../services/api";
 
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
@@ -19,7 +20,7 @@ const SearchResults = () => {
         setError(null);
 
         try {
-            const response = await fetch(`http://localhost:3000/api/productos/search?q=${encodeURIComponent(query)}`);
+            const response = await fetchData(`api/productos/search?q=${encodeURIComponent(query)}`);
             if (!response.ok) throw new Error('Error al buscar productos');
 
             const searchResults = await response.json();

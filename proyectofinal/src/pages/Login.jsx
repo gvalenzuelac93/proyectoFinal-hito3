@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { fetchData } from "../services/api";
 
 const Login = () => {
   const { login } = useContext(AuthContext);
@@ -18,7 +19,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-        const response = await fetch('http://localhost:3000/api/usuarios/login', {
+        const response = await fetchData('api/usuarios/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

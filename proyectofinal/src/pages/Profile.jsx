@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { fetchData } from "../services/api";
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
@@ -10,7 +11,7 @@ const Profile = () => {
   const fetchOrderHistory = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/ordenes', {
+      const response = await fetchData('api/ordenes', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,

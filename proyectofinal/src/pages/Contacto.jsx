@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { fetchData } from "../services/api";
 
 const Contacto = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +25,7 @@ const Contacto = () => {
     setSuccess(false);
 
     try {
-      const response = await fetch('http://localhost:3000/api/contacto', {
+      const response = await fetchData('api/contacto', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
