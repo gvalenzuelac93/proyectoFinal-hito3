@@ -61,6 +61,13 @@ const loginUsuario = async (req, res) => {
         // Generar el token
         const token = jwt.sign({ id, nombre, rol, email }, JWT_SECRET, { expiresIn: '1h' });
 
+         // Enviar el token como cookie
+    res.cookie('token', token, {
+        httpOnly: true, // No accesible desde JavaScript
+        secure: process.env.NODE_ENV === 'production', // Solo HTTPS en producción
+        maxAge: 3600000, // 1 hora
+      });
+
         // Responder con el token y los datos del usuario
         res.json({ token, user: { id, nombre, rol, email } });
     } catch (error) {
