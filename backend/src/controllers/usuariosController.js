@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const jwt_decode = require('jwt-decode'); // Asegúrate de instalar esta dependencia
 
-const JWT_SECRET = 'tu_secreto'; // Cambia esto a un secreto más seguro y mantenlo privado
+const JWT_SECRET = 'tu_secreto';
 
 // Registrar un nuevo usuario
 const registrarUsuario = async (req, res) => {
@@ -16,7 +16,7 @@ const registrarUsuario = async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(contraseña, 10);
         const newUser  = await pool.query(
-            'INSERT INTO usuarios (nombre, email, contraseña, rol) VALUES ($1, $2, $3, $4) RETURNING *',
+            'INSERT INTO usuarios (nombre, email, contrasena, rol) VALUES ($1, $2, $3, $4) RETURNING *',
             [nombre, email, hashedPassword, rol || 'user']
         );
         res.status(201).json(newUser .rows[0]);
