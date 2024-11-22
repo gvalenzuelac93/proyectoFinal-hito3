@@ -56,11 +56,11 @@ const loginUsuario = async (req, res) => {
             console.error('JWT_SECRET no está definido');
             return res.status(500).json({ error: 'Error interno del servidor' });
         }
-
+        console.log('JWT_SECRET:', process.env.JWT_SECRET);
         // Generar el token
         const token = jwt.sign({ id, nombre, rol, email }, process.env.JWT_SECRET, { expiresIn: '1h' });
 res.json({ token, user: { id, nombre, rol, email } });
-console.log('JWT_SECRET:', process.env.JWT_SECRET);
+
 
          // Enviar el token como cookie
     res.cookie('token', token, {
