@@ -1,16 +1,14 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
-  const token = req.cookies.token; // Leer el token desde las cookies
-  if (!token) {
-    return res.status(401).send({ error: 'Acceso denegado' });
-  }
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+if (!token) return res.status(401).json({ error: 'Acceso denegado: no token' });
 
-  try {
-    const verified = jwt.verify(token, process.env.JWT_SECRET); // Usa tu clave secreta desde el entorno
-    req.user = verified; // Adjuntar datos decodificados al objeto de la solicitud
-    next();
-  } catch (err) {
-    res.status(403).send({ error: 'Token inválido o expirado' });
-  }
+try {
+  const verified = jwt.verify(token, process.env.JWT_SECRET);
+  req.user = verified;
+  next();
+} catch (err) {
+  res.status(400).json({ error: 'Token inválido' });
+}
 };

@@ -31,8 +31,10 @@ const Login = () => {
         });
 
         const data = await response.json();
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+        }
 
-        console.log("Respuesta del servidor:", data); // Agrega este log
 
         if (!response.ok) {
             throw new Error(data.error || 'Error en el inicio de sesión');
@@ -43,8 +45,6 @@ const Login = () => {
             throw new Error('Usuario no encontrado o sin rol');
         }
 
-        localStorage.setItem('token', data.token); // Guardar el token en el localStorage
-        login(data.user); // Llamar a la función de login del contexto
 
         alert('Inicio de sesión exitoso');
 
