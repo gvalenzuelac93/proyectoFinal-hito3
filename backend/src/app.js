@@ -18,6 +18,7 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' })); 
 app.use(cookieParser());
 app.use(express.urlencoded({ limit: '10mb', extended: true })); // Para formularios
+require('dotenv').config();
 
 // Rutas
 app.use('/api/usuarios', usuariosRoutes);

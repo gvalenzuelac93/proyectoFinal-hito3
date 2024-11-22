@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const jwt_decode = require('jwt-decode'); // Asegúrate de instalar esta dependencia
 
-const JWT_SECRET = 'tu_secreto'; // Cambia esto a un secreto más seguro y mantenlo privado
 
 // Registrar un nuevo usuario
 const registrarUsuario = async (req, res) => {
