@@ -3,7 +3,7 @@ const pool = require('../config/db');
 // Crear un nuevo carrito
 const crearCarrito = async (usuario_id) => {
     const result = await pool.query(
-        'INSERT INTO carrito (usuario_id) VALUES ($1) RETURNING *',
+        'INSERT INTO carritos (usuario_id) VALUES ($1) RETURNING *',
         [usuario_id]
     );
     return result.rows[0];
@@ -12,7 +12,7 @@ const crearCarrito = async (usuario_id) => {
 // Obtener el carrito de un usuario
 const obtenerCarrito = async (usuario_id) => {
     const result = await pool.query(
-        'SELECT * FROM carrito WHERE usuario_id = $1',
+        'SELECT * FROM carritos WHERE usuario_id = $1',
         [usuario_id]
     );
     return result.rows[0]; // Devuelve el carrito
