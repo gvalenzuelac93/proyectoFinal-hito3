@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const productosRoutes = require('./routes/productos'); 
 const usuariosRoutes = require('./routes/usuarios');
 const carritoRoutes = require('./routes/carrito');
