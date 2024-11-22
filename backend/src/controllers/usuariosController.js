@@ -3,18 +3,18 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const jwt_decode = require('jwt-decode'); // Asegúrate de instalar esta dependencia
 
-const JWT_SECRET = 'tu_secreto';
+const JWT_SECRET = 'tu_secreto'; // Cambia esto a un secreto más seguro y mantenlo privado
 
 // Registrar un nuevo usuario
 const registrarUsuario = async (req, res) => {
-    const { nombre, email, contrasena, rol } = req.body;
+    const { nombre, email, contraseña, rol } = req.body;
 
-    if (!nombre || !email || !contrasena) {
+    if (!nombre || !email || !contraseña) {
         return res.status(400).json({ error: 'Todos los campos son requeridos' });
     }
 
     try {
-        const hashedPassword = await bcrypt.hash(contrasena, 10);
+        const hashedPassword = await bcrypt.hash(contraseña, 10);
         const newUser  = await pool.query(
             'INSERT INTO usuarios (nombre, email, contrasena, rol) VALUES ($1, $2, $3, $4) RETURNING *',
             [nombre, email, hashedPassword, rol || 'user']
@@ -28,9 +28,9 @@ const registrarUsuario = async (req, res) => {
 
 // Iniciar sesión
 const loginUsuario = async (req, res) => {
-    const { email, contrasena } = req.body;
+    const { email, contraseña } = req.body;
 
-    if (!email || !contrasena) {
+    if (!email || !contraseña) {
         return res.status(400).json({ error: 'Email y contraseña son requeridos' });
     }
 
@@ -40,7 +40,7 @@ const loginUsuario = async (req, res) => {
             return res.status(400).json({ error: 'Usuario no encontrado' });
         }
 
-        const validPassword = await bcrypt.compare(contrasena, user.rows[0].contrasena);
+        const validPassword = await bcrypt.compare(contraseña, user.rows[0].contraseña);
         if (!validPassword) {
             return res.status(400).json({ error: 'Contraseña incorrecta' });
         }
