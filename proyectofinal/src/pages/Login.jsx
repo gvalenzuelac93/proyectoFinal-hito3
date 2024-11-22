@@ -7,7 +7,7 @@ const Login = () => {
   const { login } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: '',
-    contrasena: '',
+    contraseña: '',
   });
   const navigate = useNavigate();
 
@@ -26,7 +26,7 @@ const Login = () => {
             },
             body: JSON.stringify({
                 email: formData.email,
-                contraseña: formData.contrasena,
+                contraseña: formData.contraseña,
             }),
         });
 
@@ -76,7 +76,7 @@ const Login = () => {
           name="contraseña" 
           className="form-control mt-2" 
           placeholder="Contraseña" 
-          value={formData.contrasena} 
+          value={formData.contraseña} 
           onChange={handleChange} 
           required 
         />
