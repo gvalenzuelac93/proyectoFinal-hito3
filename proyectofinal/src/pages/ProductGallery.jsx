@@ -15,7 +15,7 @@ const ProductGallery = ({ limit }) => {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetchData('api/productos');
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/productos`);
                 if (!response.ok) throw new Error('Error al cargar los productos');
 
                 const data = await response.json();

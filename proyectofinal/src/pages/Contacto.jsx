@@ -25,7 +25,7 @@ const Contacto = () => {
     setSuccess(false);
 
     try {
-      const response = await fetchData('api/contacto', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/contacto`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

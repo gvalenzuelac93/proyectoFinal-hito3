@@ -3,6 +3,7 @@ import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { fetchData } from "../services/api";
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 const Cart = () => {
     const { cart, removeFromCart, clearCart, updateQuantity } = useContext(CartContext);
@@ -35,7 +36,7 @@ const Cart = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetchData('api/ordenes', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/ordenes`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

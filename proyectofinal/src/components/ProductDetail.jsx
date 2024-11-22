@@ -15,7 +15,7 @@ const ProductDetail = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetchData(`api/productos/${id}`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/productos/${id}`);
         if (!response.ok) throw new Error('Producto no encontrado');
 
         const data = await response.json();

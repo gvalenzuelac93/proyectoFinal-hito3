@@ -11,7 +11,7 @@ const Profile = () => {
   const fetchOrderHistory = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetchData('api/ordenes', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/ordenes`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,

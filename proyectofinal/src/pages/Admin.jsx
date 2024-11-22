@@ -46,7 +46,7 @@ const Admin = () => {
     e.preventDefault();
     console.log('Datos del nuevo producto:', newProduct); // Agrega este log
     try {
-        const response = await fetchData('api/productos/add', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/productos/add`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ const Admin = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`api/productos/delete/${id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/productos/delete/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -94,7 +94,7 @@ const Admin = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await fetch('api/productos');
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/productos`);
       const data = await response.json();
       setProducts(data);
     };
