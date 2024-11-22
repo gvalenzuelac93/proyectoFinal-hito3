@@ -30,32 +30,45 @@ const registrarUsuario = async (req, res) => {
 const loginUsuario = async (req, res) => {
     const { email, contraseña } = req.body;
 
+    console.log('Cuerpo de la solicitud:', req.body);
+
     if (!email || !contraseña) {
         return res.status(400).json({ error: 'Email y contraseña son requeridos' });
     }
 
     try {
+        // Consulta a la base de datos para obtener al usuario
         const user = await pool.query('SELECT * FROM usuarios WHERE email = $1', [email]);
+
         if (user.rows.length === 0) {
             return res.status(400).json({ error: 'Usuario no encontrado' });
         }
 
-        const validPassword = await bcrypt.compare(contraseña, user.rows[0].contraseña);
+        // Comparación de contraseñas (contraseña del cliente contra contrasena de la base de datos)
+        const validPassword = await bcrypt.compare(contraseña, user.rows[0].contrasena);
+
         if (!validPassword) {
             return res.status(400).json({ error: 'Contraseña incorrecta' });
         }
 
         const { id, nombre, rol } = user.rows[0];
+
+        if (!JWT_SECRET) {
+            console.error('JWT_SECRET no está definido');
+            return res.status(500).json({ error: 'Error interno del servidor' });
+        }
+
         // Generar el token
         const token = jwt.sign({ id, nombre, rol, email }, JWT_SECRET, { expiresIn: '1h' });
 
-        // Enviar el token y la información del usuario al cliente
+        // Responder con el token y los datos del usuario
         res.json({ token, user: { id, nombre, rol, email } });
     } catch (error) {
-        console.error('Error al iniciar sesión:', error);
+        console.error('Error al iniciar sesión:', error.stack || error.message || error);
         res.status(500).json({ error: 'Error iniciando sesión' });
     }
 };
+
 
 // Middleware para verificar el token
 const verificarToken = (req, res, next) => {
