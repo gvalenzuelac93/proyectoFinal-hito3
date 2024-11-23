@@ -2,12 +2,22 @@ import React, { createContext, useState, useEffect } from 'react';
 
 export const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }) => {
     const [user, setUser ] = useState(null);
 
-    // Función para obtener los datos del usuario desde el backend
+    const setToken = (token) => {
+        localStorage.setItem('token', token);
+    };
+
     const fetchUserData = async () => {
         const token = localStorage.getItem('token');
+        
+        // Verifica si el token ha expirado
+        if (isTokenExpired(token)) {
+            logout(); // Cierra sesión si el token ha expirado
+            return;
+        }
+    
         if (token) {
             try {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/usuarios/me`, {
@@ -16,11 +26,11 @@ export const AuthProvider = ({ children }) => {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
-
+    
                 if (!response.ok) {
                     throw new Error('Error al obtener los datos del usuario');
                 }
-
+    
                 const data = await response.json();
                 setUser (data);
             } catch (error) {
@@ -32,14 +42,13 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // Cuando el componente se monta, intentamos obtener los datos del usuario
     useEffect(() => {
-        fetchUserData();  // Intenta obtener los datos del usuario cuando el componente se monta
-    }, []);  // Solo se ejecuta al montar el componente
+        fetchUserData();
+    }, []);
 
     const login = (userData) => {
         setUser (userData);
-        localStorage.setItem('token', userData.token);
+        setToken(userData.token);
     };
 
     const logout = () => {
@@ -48,7 +57,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, setUser  }}>
+        <AuthContext.Provider value={{ user, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

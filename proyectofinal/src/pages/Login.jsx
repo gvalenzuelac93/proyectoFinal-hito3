@@ -35,16 +35,15 @@ const Login = () => {
 
         const data = await response.json();
 
-        // Verifica si la respuesta fue exitosa
         if (!response.ok) {
             throw new Error(data.error || 'Error en el inicio de sesión');
         }
 
-        console.log('Datos de inicio de sesión:', data); // Asegúrate de que los datos sean correctos
+        console.log('Datos de inicio de sesión:', data);
 
-        // Almacena el token en el localStorage
+        // Almacena el token usando la función del contexto
         if (data.token) {
-            localStorage.setItem('token', data.token);
+            setToken(data.token);
         }
 
         // Verifica que el usuario tenga el rol
@@ -57,12 +56,12 @@ const Login = () => {
 
         // Redirige al usuario según su rol
         if (data.user.rol === 'admin') {
-            navigate('/admin'); // Redirigir al panel de administración
+            navigate('/admin'); 
         } else {
-            navigate('/profile'); // Redirigir al perfil del usuario
+            navigate('/profile'); 
         }
     } catch (error) {
-        setError(error.message); // Muestra el error si ocurre
+        setError(error.message);
     }
 };
 
