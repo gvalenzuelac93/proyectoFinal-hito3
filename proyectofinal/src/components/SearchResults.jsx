@@ -92,18 +92,16 @@ const SearchResults = () => {
                     Se encontraron {Array.isArray(results) ? results.length : 0} resultados
                 </p>
                 <div className="row row-cols-1 row-cols-md-3 g-4">
-                    {Array.isArray(results) ? results.map(product => {
-                        // Aquí puedes obtener la imagen de manera similar
-                        const imagenUrl = (product.imagenes && product.imagenes.length > 0) 
-                            ? product.imagenes[0].url 
-                            : '/ruta/a/imagen/predeterminada.jpg';
+                {Array.isArray(results) ? results.map(product => {
+    // Aquí puedes obtener la imagen de manera similar
+    const imagenUrl = product.imagen || 'ruta/a/imagen/predeterminada.jpg'; // Asegúrate de que esta línea esté correcta
 
-                        return (
-                            <div className="col" key={product.id}>
-                                <ProductCard product={{ ...product, imagen: imagenUrl }} />
-                            </div>
-                        );
-                    }) : null}
+    return (
+        <div className="col" key={product.id}>
+            <ProductCard product={{ ...product, imagen: imagenUrl }} /> {/* Asegúrate de que aquí se pase el objeto correcto */}
+        </div>
+    );
+}) : null}
                 </div>
             </>
         )}
