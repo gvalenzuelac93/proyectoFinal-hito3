@@ -1,13 +1,19 @@
 import React, { createContext, useState, useEffect, useCallback } from 'react';
-
+import jwt from 'jsonwebtoken';
 
 export const AuthContext = createContext();
 
 
 const isTokenExpired = (token) => {
     if (!token) return true; 
-    const payload = JSON.parse(atob(token.split('.')[1])); 
-    return payload.exp * 1000 < Date.now(); 
+    try {
+        const payload = jwt.decode(token); // Usamos jwt.decode en lugar de atob
+        if (!payload || !payload.exp) return true; // Verificamos si hay payload y expiración
+        return payload.exp * 1000 < Date.now(); 
+    } catch (error) {
+        console.error('Error decodificando el token:', error);
+        return true; // Si hay un error, consideramos que el token es inválido
+    }
 };
 
 export const AuthProvider = ({ children }) => {
