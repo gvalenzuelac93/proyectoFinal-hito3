@@ -30,14 +30,22 @@ const PrivateRoute = ({ element, adminOnly }) => {
                 const data = await response.json();
                 console.log('Datos del usuario:', data); // Verifica qué datos estás recibiendo
                 if (data) {
-                    setUser (data); // Asegúrate de que setUser  esté definido correctamente
+                    // Verificación de tipo antes de llamar a setUser 
+                    if (typeof setUser  === 'function') {
+                        setUser (data); // Llama a setUser  solo si es una función
+                    } else {
+                        console.error("setUser  no es una función");
+                    }
                 } else {
                     throw new Error("No se encontraron datos del usuario.");
                 }
             } catch (error) {
                 console.error("Error al obtener los datos del usuario:", error);
                 setError(error.message);
-                setUser (null); // Asegúrate de que setUser  esté definido correctamente
+                // Verificación de tipo antes de llamar a setUser  en caso de error
+                if (typeof setUser  === 'function') {
+                    setUser (null);
+                }
             } finally {
                 setLoading(false);
             }
