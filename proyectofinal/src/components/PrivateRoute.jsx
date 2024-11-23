@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 const PrivateRoute = ({ element, adminOnly }) => {
-    const { user, setUser } = useContext(AuthContext); // Asegúrate de tener setUser para actualizar el contexto
+    const { user, setUser } = useContext(AuthContext); // Asegúrate de que setUser sea una función
     const [loading, setLoading] = useState(true); // Para manejar la carga de datos
     const isAuthenticated = !!localStorage.getItem('token'); // Verificar si hay un token
 
@@ -21,6 +21,7 @@ const PrivateRoute = ({ element, adminOnly }) => {
                         const data = await response.json();
                         setUser(data); // Asegúrate de actualizar el estado del contexto
                     } else {
+                        console.error("Error al obtener los datos del usuario. Status:", response.status);
                         setUser(null);
                     }
                 } catch (error) {
