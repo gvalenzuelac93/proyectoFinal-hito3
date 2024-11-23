@@ -47,6 +47,7 @@ const PrivateRoute = ({ element, adminOnly }) => {
         } else {
             setUser(null);
             setLoading(false);
+            setError("No hay token, por favor inicie sesión.");
         }
     }, [setUser]);
 
@@ -62,7 +63,6 @@ const PrivateRoute = ({ element, adminOnly }) => {
         return <Navigate to="/login" />;
     }
 
-    // Si se requiere ser admin y no lo es, redirige
     if (adminOnly && user.rol !== 'admin') {
         return <Navigate to="/" />;
     }
