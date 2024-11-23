@@ -64,35 +64,39 @@ const Login = () => {
     return (
         <div className="container mt-4">
             <h2>Iniciar Sesión</h2>
-            <form onSubmit={handleLogin}>
-                <div className="mb-3">
-                    <input
-                        type="email"
-                        name="email"
-                        className="form-control"
-                        placeholder="Correo electrónico"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <input
-                        type="password"
-                        name="contraseña"
-                        className="form-control"
-                        placeholder="Contraseña"
-                        value={formData.contraseña}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
+            {showRegister ? (
+                <Register /> // Muestra el formulario de registro
+            ) : (
+                <form onSubmit={handleLogin}>
+                    <div className="mb-3">
+                        <input
+                            type="email"
+                            name="email"
+                            className="form-control"
+                            placeholder="Correo electrónico"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <input
+                            type="password"
+                            name="contraseña"
+                            className="form-control"
+                            placeholder="Contraseña"
+                            value={formData.contraseña}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
 
-                {error && <div className="alert alert-danger">{error}</div>}
+                    {error && <div className="alert alert-danger">{error}</div>}
 
-                <button type="submit" className="btn mi-botonsito mt-3">Iniciar Sesión</button>
-                <button type="button" className="btn mi-botonsito mt-3" onClick={() => setShowRegister(true)}>Registrar</button>
-            </form>
+                    <button type="submit" className="btn mi-botonsito mt-3">Iniciar Sesión</button>
+                    <button type="button" className="btn mi-botonsito mt-3" onClick={() => setShowRegister(true)}>Registrar</button>
+                </form>
+            )}
         </div>
     );
 };
