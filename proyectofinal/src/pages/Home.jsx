@@ -5,7 +5,7 @@ const Home = () => {
   return (
     <div className="container">
       <header className="text-center py-5">
-        <h1 className="display-4">Bienvenidos a la Tienda de K-pop y Anime</h1>
+        <h1 className="display-4">Sarang Shop 💕🎵</h1>
         <p className="lead text-muted">Descubre nuestra colección de productos</p>
       </header>
       

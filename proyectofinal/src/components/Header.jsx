@@ -16,7 +16,7 @@ const Header = () => {
             </Link>
           </div>
           <div className="col-md-8">
-            <h1 className="site-title">Tienda K-pop y Anime</h1>
+            <h1 className="site-title">Sarang Shop 💕🎵</h1>
           </div>
         </div>
       </div>
