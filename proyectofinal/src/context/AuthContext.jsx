@@ -1,28 +1,29 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
 
-// Crear el contexto
+
 export const AuthContext = createContext();
 
-// Función para verificar si el token ha expirado
+
 const isTokenExpired = (token) => {
-    if (!token) return true; // Si no hay token, se considera que está expirado
-    const payload = JSON.parse(atob(token.split('.')[1])); // Decodifica el payload del token
-    return payload.exp * 1000 < Date.now(); // Verifica si la fecha de expiración es menor que la fecha actual
+    if (!token) return true; 
+    const payload = JSON.parse(atob(token.split('.')[1])); 
+    return payload.exp * 1000 < Date.now(); 
 };
 
 const AuthProvider = ({ children }) => {
     const [user, setUser ] = useState(null);
 
+    
     const setToken = (token) => {
         localStorage.setItem('token', token);
+        fetchUserData(token); 
     };
 
-    const fetchUserData = async () => {
-        const token = localStorage.getItem('token');
-
-        // Verifica si el token ha expirado
+    
+    const fetchUserData = useCallback(async (token) => {
+        
         if (isTokenExpired(token)) {
-            logout(); // Cierra sesión si el token ha expirado
+            logout(); 
             return;
         }
 
@@ -36,36 +37,32 @@ const AuthProvider = ({ children }) => {
                 });
 
                 if (!response.ok) {
-                    throw new Error('Error al obtener los datos del usuario');
+                    throw new Error('Failed to fetch user data');
                 }
 
                 const data = await response.json();
-                setUser (data);
+                setUser (data); 
             } catch (error) {
-                console.error("Error al obtener los datos del usuario:", error);
-                setUser (null);
+                console.error('Error fetching user data:', error);
+                logout(); 
             }
-        } else {
-            setUser (null);
         }
-    };
-
-    useEffect(() => {
-        fetchUserData();
     }, []);
 
-    const login = (userData) => {
-        setUser (userData);
-        setToken(userData.token);
+    
+    const logout = () => {
+        localStorage.removeItem('token');
+        setUser (null); 
     };
 
-    const logout = () => {
-        setUser (null);
-        localStorage.removeItem('token');
-    };
+    
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        fetchUserData(token);
+    }, [fetchUserData]);
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, setToken, logout }}>
             {children}
         </AuthContext.Provider>
     );
