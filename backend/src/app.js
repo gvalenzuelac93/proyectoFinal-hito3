@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -8,7 +7,7 @@ const usuariosRoutes = require('./routes/usuarios');
 const carritoRoutes = require('./routes/carrito');
 const imagenesProductosRoutes = require('./routes/imagenesProductos');
 const ordenesRoutes = require('./routes/ordenes');
-console.log(process.env.JWT_SECRET);
+
 const app = express();
 app.use(bodyParser.json());
 app.use(cors({
