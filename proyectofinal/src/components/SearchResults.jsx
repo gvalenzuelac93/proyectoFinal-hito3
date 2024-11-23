@@ -12,8 +12,6 @@ const SearchResults = () => {
   const query = searchParams.get('q')?.toLowerCase();
   const navigate = useNavigate();
 
-  const imagenUrl = product.imagen || 'ruta/a/imagen/predeterminada.jpg'; // Imagen predeterminada
-
   useEffect(() => {
     const fetchResults = async () => {
         if (!query) return;
@@ -92,36 +90,35 @@ const SearchResults = () => {
             Se encontraron {Array.isArray(results) ? results.length : 0} resultados
           </p>
           <div className="row row-cols-1 row-cols-md-3 g-4">
-            {Array.isArray(results) ? results.map(product => (
-              <div key={product.id} className="col">
-                <div className="card h-100">
-                  <img 
-                    src={imagenUrl} className="card-img-top" alt={product.titulo}
-                    style={{ height: '200px', objectFit: 'contain' }}
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title">{product.titulo}</h5>
-                    <p className="card-text">
-                      {product.descripcion.length > 100 
-                        ? `${product.descripcion.substring(0, 100)}...` 
-                        : product.descripcion}
-                    </p>
-                    <p className="card-text">
-                      <small className="text-muted">Categoría: {product.categoria}</small>
-                    </p>
-                    <p className="card-text">
-                      <strong>Precio: ${product.precio}</strong>
-                    </p>
-                    <button 
-                      className="btn btn-primary"
-                      onClick={() => navigate(`/product/${product.id}`)}
-                    >
-                      Ver detalles
-                    </button>
+            {Array.isArray(results) ? results.map(product => {
+              const imagenUrl = product.imagen || 'ruta/a/imagen/predeterminada.jpg'; // Imagen predeterminada
+
+              return (
+                <div key={product.id} className="col">
+                  <div className="card h-100">
+                    <img 
+                      src={imagenUrl} className="card-img-top" alt={product.titulo}
+                      style={{ height: '200px', objectFit: 'contain' }}
+                    />
+                    <div className="card-body">
+                      <h5 className="card-title">{product.titulo}</h5>
+                      <p className="card-text">
+                        {product.descripcion.length > 100 
+                          ? `${product.descripcion.substring(0, 100)}...` 
+                          : product.descripcion}
+                      </p>
+                      <p className="card-text">
+                        <small className="text-muted">Categoría: {product.categoria}</small>
+                      </p>
+                      <p className="card-text">
+                        <strong>Precio: ${product.precio}</strong>
+                      </p>
+                      <button className="btn btn-primary">Agregar al carrito</button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )) : null}
+              );
+            }) : null}
           </div>
         </>
       )}
