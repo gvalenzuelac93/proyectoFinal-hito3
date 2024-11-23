@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import Register from './Register';
 
 const Login = () => {
     const { login, setToken } = useContext(AuthContext);
@@ -90,7 +91,7 @@ const Login = () => {
                 {error && <div className="alert alert-danger">{error}</div>}
 
                 <button type="submit" className="btn mi-botonsito mt-3">Iniciar Sesión</button>
-                <button type="submit" className="btn mi-botonsito mt-3">Registrar</button>
+                <button type="button" className="btn mi-botonsito mt-3" onClick={() => setShowRegister(true)}>Registrar</button>
             </form>
         </div>
     );
