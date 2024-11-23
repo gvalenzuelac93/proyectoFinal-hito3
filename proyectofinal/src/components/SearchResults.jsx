@@ -12,6 +12,8 @@ const SearchResults = () => {
   const query = searchParams.get('q')?.toLowerCase();
   const navigate = useNavigate();
 
+  const imagenUrl = product.imagen || 'ruta/a/imagen/predeterminada.jpg'; // Imagen predeterminada
+
   useEffect(() => {
     const fetchResults = async () => {
         if (!query) return;
@@ -94,9 +96,7 @@ const SearchResults = () => {
               <div key={product.id} className="col">
                 <div className="card h-100">
                   <img 
-                    src={product.image} 
-                    className="card-img-top" 
-                    alt={product.titulo}
+                    src={imagenUrl} className="card-img-top" alt={product.titulo}
                     style={{ height: '200px', objectFit: 'contain' }}
                   />
                   <div className="card-body">

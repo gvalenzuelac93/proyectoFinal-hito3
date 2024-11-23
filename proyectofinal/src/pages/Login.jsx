@@ -3,7 +3,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const { login } = useContext(AuthContext); // Obtener la función login desde el AuthContext
+  const { login, setToken} = useContext(AuthContext); // Obtener la función login desde el AuthContext
   const [formData, setFormData] = useState({
     email: '',
     contraseña: '',
