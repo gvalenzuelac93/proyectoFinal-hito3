@@ -8,6 +8,15 @@ const PrivateRoute = ({ element, adminOnly }) => {
     const [error, setError] = useState(null);
 
     const isAuthenticated = !!localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+if (token) {
+  // Asegúrate de pasar el token correctamente
+  headers['Authorization'] = `Bearer ${token}`;
+} else {
+  setError('Token no encontrado');
+  setUser(null);
+  setLoading(false);
+}
 
     useEffect(() => {
         const token = localStorage.getItem('token');
