@@ -18,6 +18,6 @@ router.get('/', auth, obtenerUsuarios); // Ruta protegida (solo para usuarios au
 router.put('/:id', auth, actualizarUsuario); // Ruta protegida (solo para usuarios autenticados)
 router.delete('/:id', auth, eliminarUsuario); // Ruta protegida (solo para usuarios autenticados)
 // Ruta protegida para obtener los datos del usuario
-router.get('/me', verificarToken, obtenerUsuario);  // Usamos el middleware de verificación de token
+router.get('/me', obtenerUsuario);  // Usamos el middleware de verificación de token
 
 module.exports = router;
