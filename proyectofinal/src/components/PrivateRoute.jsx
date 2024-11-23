@@ -5,7 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 const PrivateRoute = ({ element, adminOnly }) => {
     const { user, setUser } = useContext(AuthContext);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null); // Para manejar el error
+    const [error, setError] = useState(null);
 
     const isAuthenticated = !!localStorage.getItem('token');
 
@@ -55,13 +55,14 @@ const PrivateRoute = ({ element, adminOnly }) => {
     }
 
     if (error) {
-        return <div>{error}</div>; // Mostrar el error si lo hay
+        return <div>{error}</div>;
     }
 
     if (!isAuthenticated || !user) {
         return <Navigate to="/login" />;
     }
 
+    // Si se requiere ser admin y no lo es, redirige
     if (adminOnly && user.rol !== 'admin') {
         return <Navigate to="/" />;
     }
