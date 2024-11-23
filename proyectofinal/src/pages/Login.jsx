@@ -66,6 +66,21 @@ const Login = () => {
     }
   };
 
+  // Verificar si el token ha expirado
+  const checkToken = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = jwt_decode(token);
+      const isExpired = decodedToken.exp < Date.now() / 1000;
+      if (isExpired) {
+        localStorage.removeItem('token'); // Elimina el token si ha expirado
+        setError('El token ha expirado. Por favor, inicia sesión nuevamente.');
+        return true;
+      }
+    }
+    return false;
+  };
+
   return (
     <div className="container mt-4">
       <h2>Iniciar Sesión</h2>
