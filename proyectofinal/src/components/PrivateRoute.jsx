@@ -3,64 +3,61 @@ import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 const PrivateRoute = ({ element, adminOnly }) => {
-    const { user, setUser  } = useContext(AuthContext);
+    const { user, setUser } = useContext(AuthContext);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchUserData = async () => {
-            const token = localStorage.getItem('token'); // Obtener el token del localStorage
+            const token = localStorage.getItem('token');
             if (!token) {
                 setLoading(false);
-                return; // Si no hay token, no hacemos la solicitud
+                return;
             }
 
             try {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/usuarios/me`, {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Bearer ${token}`, // Incluir el token en la cabecera
+                        'Authorization': `Bearer ${token}`,
                     },
                 });
 
                 if (!response.ok) {
-                    setError(`Error: ${response.statusText}`);
-                    setUser (null);
-                    return;
+                    throw new Error(`Error: ${response.statusText}`);
                 }
 
                 const data = await response.json();
                 if (data) {
-                    setUser (data);
+                    setUser(data);
                 } else {
-                    setError("No se encontraron datos del usuario.");
-                    setUser (null);
+                    throw new Error("No se encontraron datos del usuario.");
                 }
             } catch (error) {
                 console.error("Error al obtener los datos del usuario:", error);
-                setError("Hubo un problema al obtener los datos.");
-                setUser (null);
+                setError(error.message);
+                setUser(null);
             } finally {
                 setLoading(false);
             }
         };
 
         fetchUserData();
-    }, [setUser ]);
+    }, [setUser]);
 
     if (loading) {
         return <div>Cargando...</div>;
     }
 
     if (error) {
-        return <Navigate to="/login" />; // Redirigir a la página de inicio de sesión si hay un error
+        return <Navigate to="/login" />;
     }
 
     if (adminOnly && user?.rol !== 'admin') {
-        return <Navigate to="/profile" />; // Redirigir si no es un administrador
+        return <Navigate to="/profile" />;
     }
 
-    return element; // Devolver el elemento si todo está bien
+    return element;
 };
 
 export default PrivateRoute;
