@@ -25,46 +25,44 @@ const Navbar = () => {
 
   return (
     <nav className="navbar navbar-expand-lg navbar-secondary bg-secondary flex-column">
-  <div className="container-fluid">
-        
-    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-      <span className="navbar-toggler-icon"></span>
-    </button>
-
-    <div className="collapse navbar-collapse" id="navbarContent">
-      <form className="d-flex me-auto" onSubmit={handleSearch}>
-        <input
-          className="form-control me-2"
-          type="search"
-          placeholder="Buscar productos..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <button className="btn btn-outline-light" type="submit">
-          <i className="bi bi-search"></i>
+      <div className="container-fluid">
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+          <span className="navbar-toggler-icon"></span>
         </button>
-      </form>
 
-      <ul className="navbar-nav mx-auto mb-2 mb-lg-0 ">
-        <li className="nav-item">
-          <Link className="nav-link" to="/">Inicio</Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/gallery">Tienda</Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/acerca-de">Acerca de</Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/contacto">Contacto</Link>
-        </li>
-        {user && user.role === 'admin' && ( // Mostrar solo si es admin
-    <li className="nav-item">
-      <Link className="nav-link" to="/admin">Panel Admin</Link>
-    </li>
-  )}
-      </ul>
+        <div className="collapse navbar-collapse" id="navbarContent">
+          <form className="d-flex me-auto" onSubmit={handleSearch}>
+            <input
+              className="form-control me-2"
+              type="search"
+              placeholder="Buscar productos..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button className="btn btn-outline-light" type="submit">
+              <i className="bi bi-search"></i>
+            </button>
+          </form>
 
+          <ul className="navbar-nav mx-auto mb-2 mb-lg-0 ">
+            <li className="nav-item">
+              <Link className="nav-link" to="/">Inicio</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/gallery">Tienda</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/acerca-de">Acerca de</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/contacto">Contacto</Link>
+            </li>
+            {user && user.role === 'admin' && ( // Mostrar solo si es admin
+              <li className="nav-item">
+                <Link className="nav-link" to="/admin">Panel Admin</Link>
+              </li>
+            )}
+          </ul>
 
           <div className="d-flex align-items-center">
             {user ? (
@@ -75,7 +73,7 @@ const Navbar = () => {
                 <ul className="dropdown-menu dropdown-menu-end">
                   <li><Link className="dropdown-item" to="/profile">Perfil</Link></li>
                   {user.role === 'admin' && (
-                    <li><Link className="dropdown-item" to="/admin">Panel Admin</Link></li>
+                    <li><Link className="dropdown-item" to="/admin">Panel Admin</Link></li> // Asegura que el admin tenga el acceso aquí también
                   )}
                   <li><hr className="dropdown-divider" /></li>
                   <li><button className="dropdown-item" onClick={logout}>Cerrar sesión</button></li>
