@@ -45,19 +45,22 @@ const Admin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Datos del nuevo producto:', newProduct); // Agrega este log
+  
     try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/productos/add`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            },
-            body: JSON.stringify(newProduct),
-        });
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      };
+  
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/productos/add`, {
+        method: 'POST',
+        headers: headers, // Usa la variable headers aquí
+        body: JSON.stringify(newProduct),
+      });
 
-        if (!response.ok) throw new Error('Error al agregar el producto');
+      if (!response.ok) throw new Error('Error al agregar el producto');
 
-        const product = await response.json();
+      const product = await response.json();
       setProducts(prev => [...prev, product]);
       setNewProduct({
         title: '',
@@ -66,7 +69,7 @@ const Admin = () => {
         image: '',
         category: ''
       });
-      setImagePreview(''); // Resetear la vista previa
+      setImagePreview('');
       setShowForm(false);
       alert('Producto agregado exitosamente');
     } catch (error) {
