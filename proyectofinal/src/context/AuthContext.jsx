@@ -1,34 +1,65 @@
-import React, { createContext, useState, useEffect } from 'react';
-import jwt from 'jsonwebtoken';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
 
-const AuthContext = createContext();
+
+export const AuthContext = createContext();
+
+
+const isTokenExpired = (token) => {
+    if (!token) return true; 
+    const payload = JSON.parse(atob(token.split('.')[1])); 
+    return payload.exp * 1000 < Date.now(); 
+};
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser ] = useState(null);
 
+    
     const setToken = (token) => {
         localStorage.setItem('token', token);
-        fetchUserData(token); // Cambié el nombre de la función a fetchUser Data
+        fetchUserData(token); 
     };
 
-    const fetchUserData = (token) => {
-        const decoded = jwt.decode(token);
-        if (decoded) {
-            setUser (decoded);
+    
+    const fetchUserData = useCallback(async (token) => {
+        
+        if (isTokenExpired(token)) {
+            logout(); 
+            return;
         }
-    };
 
-    const logout = () => {
-        localStorage.removeItem('token');
-        setUser (null);
-    };
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
         if (token) {
-            fetchUserData(token); // Cambié el nombre de la función a fetchUser Data
+            try {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/usuarios/me`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user data');
+                }
+
+                const data = await response.json();
+                setUser (data); 
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                logout(); 
+            }
         }
     }, []);
+
+    
+    const logout = () => {
+        localStorage.removeItem('token');
+        setUser (null); 
+    };
+
+    
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        fetchUserData(token);
+    }, [fetchUserData]);
 
     return (
         <AuthContext.Provider value={{ user, setToken, logout }}>
@@ -37,4 +68,4 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
-export const useAuth = () => React.useContext(AuthContext);
+export default AuthProvider;
