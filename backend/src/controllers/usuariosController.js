@@ -104,6 +104,24 @@ const obtenerUsuarios = async (req, res) => {
     }
 };
 
+const obtenerUsuario = async (req, res) => {
+    try {
+        // Verificar si el usuario está autenticado a través del token
+        const userId = req.user.id; // 'req.user' debe contener los datos decodificados del JWT
+
+        const result = await pool.query('SELECT id, nombre, email, rol FROM usuarios WHERE id = $1', [userId]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+
+        res.json(result.rows[0]); // Devuelve los datos del usuario
+    } catch (error) {
+        console.error('Error al obtener los datos del usuario:', error);
+        res.status(500).json({ error: 'Error al obtener los datos del usuario' });
+    }
+};
+
 // Actualizar usuario
 const actualizarUsuario = async (req, res) => {
     const { id } = req.params;
@@ -153,6 +171,7 @@ module.exports = {
     loginUsuario,
     verificarToken,
     obtenerUsuarios,
+    obtenerUsuario,
     actualizarUsuario,
     eliminarUsuario,
 };
