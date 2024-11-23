@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import Register from './Register';
+import Register from './Register'; // Importa el componente Register
 
 const Login = () => {
     const { login, setToken } = useContext(AuthContext);
@@ -10,6 +10,7 @@ const Login = () => {
         contraseña: '',
     });
     const [error, setError] = useState(null);
+    const [showRegister, setShowRegister] = useState(false); // Estado para controlar el registro
     const navigate = useNavigate();
 
     const handleChange = (e) => {
