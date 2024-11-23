@@ -81,18 +81,17 @@ const loginUsuario = async (req, res) => {
 const verificarToken = (req, res, next) => {
     const token = req.headers['authorization']?.split(' ')[1]; // Obtener el token desde el encabezado Authorization
     if (!token) {
-      return res.status(401).json({ error: 'Token no proporcionado' });
+        return res.status(401).json({ error: 'Token no proporcionado' });
     }
-  
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-      if (err) {
-        return res.status(401).json({ error: 'Token inválido' });
-      }
-      req.user = decoded; // Guardar la información del usuario decodificada en la solicitud
-      next();
-    });
-  };
 
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        if (err) {
+            return res.status(401).json({ error: 'Token inválido' });
+        }
+        req.user = decoded; // Guardar la información del usuario decodificada en la solicitud
+        next();
+    });
+};
 
 // Obtener todos los usuarios (solo para admin)
 const obtenerUsuarios = async (req, res) => {

@@ -44,7 +44,7 @@ const Login = () => {
 
       // Almacena el token en el localStorage
       if (data.token) {
-        localStorage.setItem('token', data.token);
+        localStorage.setItem('token', data.token); // Asegúrate de que esto se ejecute correctamente
       }
 
       // Verifica que el usuario tenga el rol
