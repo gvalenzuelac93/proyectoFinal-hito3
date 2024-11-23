@@ -68,40 +68,47 @@ const SearchResults = () => {
 
   return (
     <div className="container mt-4">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Resultados para "{query}"</h2>
-        <select 
-          className="form-select w-auto" 
-          value={sortBy} 
-          onChange={(e) => handleSort(e.target.value)}
-        >
-          <option value="relevance">Relevancia</option>
-          <option value="price-low">Precio: Menor a Mayor</option>
-          <option value="price-high">Precio: Mayor a Menor</option>
-          <option value="name">Nombre</option>
-        </select>
-      </div>
-
-      {Array.isArray(results) && results.length === 0 ? (
-        <div className="alert alert-info">
-          No se encontraron resultados para "{query}"
+        <div className="d-flex justify-content-between align-items-center mb-4">
+            <h2>Resultados para "{query}"</h2>
+            <select 
+                className="form-select w-auto" 
+                value={sortBy} 
+                onChange={(e) => handleSort(e.target.value)}
+            >
+                <option value="relevance">Relevancia</option>
+                <option value="price-low">Precio: Menor a Mayor</option>
+                <option value="price-high">Precio: Mayor a Menor</option>
+                <option value="name">Nombre</option>
+            </select>
         </div>
-      ) : (
-        <>
-          <p className="text-muted mb-4">
-            Se encontraron {Array.isArray(results) ? results.length : 0} resultados
-          </p>
-          <div className="row row-cols-1 row-cols-md-3 g-4">
-            {Array.isArray(results) ? results.map(product => (
-                <div className="col" key={product.id}>
-                    <ProductCard product={product} />
+
+        {Array.isArray(results) && results.length === 0 ? (
+            <div className="alert alert-info">
+                No se encontraron resultados para "{query}"
+            </div>
+        ) : (
+            <>
+                <p className="text-muted mb-4">
+                    Se encontraron {Array.isArray(results) ? results.length : 0} resultados
+                </p>
+                <div className="row row-cols-1 row-cols-md-3 g-4">
+                    {Array.isArray(results) ? results.map(product => {
+                        // Aquí puedes obtener la imagen de manera similar
+                        const imagenUrl = (product.imagenes && product.imagenes.length > 0) 
+                            ? product.imagenes[0].url 
+                            : '/ruta/a/imagen/predeterminada.jpg';
+
+                        return (
+                            <div className="col" key={product.id}>
+                                <ProductCard product={{ ...product, imagen: imagenUrl }} />
+                            </div>
+                        );
+                    }) : null}
                 </div>
-            )) : null}
-          </div>
-        </>
-      )}
+            </>
+        )}
     </div>
-  );
+);
 };
 
 export default SearchResults;
