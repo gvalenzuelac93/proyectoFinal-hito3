@@ -41,15 +41,22 @@ const Login = () => {
                 setToken(data.token); // Almacena el token
             }
 
-            login(data.user); // Actualiza el estado del usuario
+            if (data.user) {
+                login(data.user); // Actualiza el estado del usuario
+                console.log('Usuario logueado:', data.user); // Verifica que el usuario se esté estableciendo correctamente
 
-            if (data.user.rol === 'admin') {
-                navigate('/admin'); 
+                // Redirige según el rol del usuario
+                if (data.user.rol === 'admin') {
+                    navigate('/admin'); 
+                } else {
+                    navigate('/profile'); 
+                }
             } else {
-                navigate('/profile'); 
+                throw new Error('No se recibió información del usuario');
             }
         } catch (error) {
             setError(error.message);
+            console.error('Error al iniciar sesión:', error); // Para depuración
         }
     };
 
