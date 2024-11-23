@@ -10,7 +10,7 @@ const isTokenExpired = (token) => {
     return payload.exp * 1000 < Date.now(); 
 };
 
-const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children }) => {
     const [user, setUser ] = useState(null);
 
     
