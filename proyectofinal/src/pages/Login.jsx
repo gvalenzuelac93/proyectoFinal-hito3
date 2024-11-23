@@ -22,49 +22,49 @@ const Login = () => {
     setError(null); // Limpiar errores previos
 
     try {
-      // Realiza la solicitud de inicio de sesión al backend
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/usuarios/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          contraseña: formData.contraseña,
-        }),
-      });
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/usuarios/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: formData.email,
+                contraseña: formData.contraseña,
+            }),
+        });
 
-      // Obtiene la respuesta en formato JSON
-      const data = await response.json();
+        const data = await response.json();
 
-      // Verifica si la respuesta fue exitosa
-      if (!response.ok) {
-        throw new Error(data.error || 'Error en el inicio de sesión');
-      }
+        // Verifica si la respuesta fue exitosa
+        if (!response.ok) {
+            throw new Error(data.error || 'Error en el inicio de sesión');
+        }
 
-      // Almacena el token en el localStorage
-      if (data.token) {
-        localStorage.setItem('token', data.token); // Asegúrate de que esto se ejecute correctamente
-      }
+        console.log('Datos de inicio de sesión:', data); // Asegúrate de que los datos sean correctos
 
-      // Verifica que el usuario tenga el rol
-      if (!data.user || !data.user.rol) {
-        throw new Error('Usuario no encontrado o sin rol');
-      }
+        // Almacena el token en el localStorage
+        if (data.token) {
+            localStorage.setItem('token', data.token);
+        }
 
-      // Llama a la función login del AuthContext para actualizar el estado global
-      login(data.user);
+        // Verifica que el usuario tenga el rol
+        if (!data.user || !data.user.rol) {
+            throw new Error('Usuario no encontrado o sin rol');
+        }
 
-      // Redirige al usuario según su rol
-      if (data.user.rol === 'admin') {
-        navigate('/admin'); // Redirigir al panel de administración
-      } else {
-        navigate('/profile'); // Redirigir al perfil del usuario
-      }
+        // Llama a la función login del AuthContext para actualizar el estado global
+        login(data.user);
+
+        // Redirige al usuario según su rol
+        if (data.user.rol === 'admin') {
+            navigate('/admin'); // Redirigir al panel de administración
+        } else {
+            navigate('/profile'); // Redirigir al perfil del usuario
+        }
     } catch (error) {
-      setError(error.message); // Muestra el error si ocurre
+        setError(error.message); // Muestra el error si ocurre
     }
-  };
+};
 
   return (
     <div className="container mt-4">
