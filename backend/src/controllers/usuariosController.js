@@ -108,18 +108,19 @@ const obtenerUsuario = async (req, res) => {
     const { id } = req.user;  // Extraer el id del usuario desde el token
   
     try {
-      const result = await pool.query('SELECT id, nombre, email, rol FROM usuarios WHERE id = $1', [id]);
+        const result = await pool.query('SELECT id, nombre, email, rol FROM usuarios WHERE id = $1', [id]);
   
-      if (result.rows.length === 0) {
-        return res.status(404).json({ error: 'Usuario no encontrado' });
-      }
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
   
-      res.json(result.rows[0]);
-    } catch (error) {
-      console.error('Error obteniendo usuario:', error);
-      return res.status(500).json({ error: 'Error obteniendo usuario' });
+        res.json(result.rows[0]);
+    } catch (error 
+) {
+        console.error('Error obteniendo usuario:', error);
+        return res.status(500).json({ error: 'Error interno del servidor' });
     }
-  };
+};
 
 // Actualizar usuario
 const actualizarUsuario = async (req, res) => {
