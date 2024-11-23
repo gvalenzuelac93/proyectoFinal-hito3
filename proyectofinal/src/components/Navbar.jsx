@@ -23,6 +23,8 @@ const Navbar = () => {
     }
   };
 
+  console.log("Datos del usuario:", user); // Verifica los datos del usuario
+
   return (
     <nav className="navbar navbar-expand-lg navbar-secondary bg-secondary flex-column">
       <div className="container-fluid">
@@ -57,7 +59,7 @@ const Navbar = () => {
             <li className="nav-item">
               <Link className="nav-link" to="/contacto">Contacto</Link>
             </li>
-            {user && user.role === 'admin' && ( // Mostrar solo si es admin
+            {user && user.role === 'admin' && (
               <li className="nav-item">
                 <Link className="nav-link" to="/admin">Panel Admin</Link>
               </li>
@@ -73,7 +75,7 @@ const Navbar = () => {
                 <ul className="dropdown-menu dropdown-menu-end">
                   <li><Link className="dropdown-item" to="/profile">Perfil</Link></li>
                   {user.role === 'admin' && (
-                    <li><Link className="dropdown-item" to="/admin">Panel Admin</Link></li> // Asegura que el admin tenga el acceso aquí también
+                    <li><Link className="dropdown-item" to="/admin">Panel Admin</Link></li>
                   )}
                   <li><hr className="dropdown-divider" /></li>
                   <li><button className="dropdown-item" onClick={logout}>Cerrar sesión</button></li>
