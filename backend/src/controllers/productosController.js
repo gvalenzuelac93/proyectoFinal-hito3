@@ -104,7 +104,13 @@ const eliminarProducto = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const result = await pool.query('DELETE FROM productos WHERE id = $1', [id]);
+        // Verifica que el ID sea un número
+        const idNumber = Number(id);
+        if (isNaN(idNumber)) {
+            return res.status(400).json({ error: 'El ID debe ser un número' });
+        }
+
+        const result = await pool.query('DELETE FROM productos WHERE id = $1', [idNumber]);
         if (result.rowCount === 0) {
             return res.status(404).json({ error: 'Producto no encontrado' });
         }
