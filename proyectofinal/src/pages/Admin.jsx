@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
+
 const Admin = () => {
   const { user } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
@@ -15,7 +16,7 @@ const Admin = () => {
 
   if (!user || user.rol !== 'admin') {
     return <p>No tienes permiso para ver esta página.</p>;
-}
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -40,20 +41,25 @@ const Admin = () => {
     }
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Datos del nuevo producto:', newProduct);
   
     try {
+      const token = localStorage.getItem('token');
+      if (!token) throw new Error('No se encontró el token de autenticación');
+  
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      };
+
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/productos/add`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
+        headers: headers,
         body: JSON.stringify(newProduct),
       });
+
       if (!response.ok) throw new Error('Error al agregar el producto');
 
       const product = await response.json();
@@ -75,10 +81,13 @@ const Admin = () => {
 
   const handleDelete = async (id) => {
     try {
+      const token = localStorage.getItem('token');
+      if (!token) throw new Error('No se encontró el token de autenticación');
+  
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/productos/delete/${id}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`,
         },
       });
 
@@ -109,7 +118,7 @@ const Admin = () => {
       </button>
       {showForm && (
         <form onSubmit={handleSubmit} className="mb-4">
-        <input 
+          <input 
             type="text" 
             name="title" 
             placeholder="Título" 
@@ -117,16 +126,16 @@ const Admin = () => {
             onChange={handleInputChange} 
             required 
             className="form-control mb-2"
-        />
-        <textarea 
+          />
+          <textarea 
             name="description" 
             placeholder="Descripción" 
             value={newProduct.description} 
             onChange={handleInputChange} 
             required 
             className="form-control mb-2"
-        />
-        <input 
+          />
+          <input 
             type="number" 
             name="price" 
             placeholder="Precio" 
@@ -134,17 +143,17 @@ const Admin = () => {
             onChange={handleInputChange} 
             required 
             className="form-control mb-2"
-        />
-        <input 
-            type="text" // Cambiado a tipo "text" para URL
+          />
+          <input 
+            type="text" 
             name="image" 
-            placeholder="URL de la Imagen" // Cambiado para indicar que se espera una URL
+            placeholder="URL de la Imagen" 
             value={newProduct.image} 
             onChange={handleInputChange} 
             required 
             className="form-control mb-2"
-        />
-        <input 
+          />
+          <input 
             type="text" 
             name="category" 
             placeholder="Categoría" 
@@ -152,9 +161,9 @@ const Admin = () => {
             onChange={handleInputChange} 
             required 
             className="form-control mb-2"
-        />
-        <button type="submit" className="btn btn-success">Agregar Producto</button>
-    </form>
+          />
+          <button type="submit" className="btn btn-success">Agregar Producto</button>
+        </form>
       )}
       <h3>Lista de Productos</h3>
       <ul className="list-group">
