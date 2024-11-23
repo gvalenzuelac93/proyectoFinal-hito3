@@ -6,7 +6,6 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState('profile');
   const [orderHistory, setOrderHistory] = useState([]);
 
-  // Método para obtener el historial de pedidos
   const fetchOrderHistory = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -20,20 +19,18 @@ const Profile = () => {
       if (!response.ok) throw new Error('Error al obtener el historial de pedidos');
 
       const data = await response.json();
-      setOrderHistory(data); // Asumiendo que la respuesta es un array de pedidos
+      setOrderHistory(data);
     } catch (error) {
       console.error(error);
     }
   };
 
-  // Llama a fetchOrderHistory cuando el componente se monta y el usuario está disponible
   useEffect(() => {
     if (user) {
       fetchOrderHistory();
     }
-  }, [user]);  // Dependemos del 'user' para recargar los datos
+  }, [user]);
 
-  // Método para renderizar el historial de pedidos
   const renderOrderHistory = () => {
     return (
       <div>
@@ -50,8 +47,8 @@ const Profile = () => {
                 {Array.isArray(order.productos) && order.productos.length > 0 ? (
                   <ul>
                     {order.productos.map(product => (
-                      <li key={product.producto_id}> {/* Asegúrate de usar la propiedad correcta */}
-                        <p>Producto: {product.titulo}</p> {/* Aquí se muestra el nombre del producto */}
+                      <li key={product.producto_id}>
+                        <p>Producto: {product.titulo}</p>
                         <p>Cantidad: {product.cantidad}</p>
                         <p>Precio: ${product.precio}</p>
                       </li>
@@ -68,10 +65,9 @@ const Profile = () => {
     );
   };
 
-  // Método para renderizar la información del perfil
   const renderProfile = () => {
     if (!user) {
-      return <p>Cargando...</p>;  // Puedes mostrar un mensaje de carga mientras el usuario está siendo cargado
+      return <p>Cargando...</p>;
     }
 
     return (
@@ -85,13 +81,12 @@ const Profile = () => {
 
   return (
     <div className="container mt-4">
-      <h2>Perfil de Usuario</h2>
-      <div className="nav nav-tabs" role="tablist">
-        <button className={`nav-link ${activeTab === 'profile' ? 'active' : ''}`} onClick={() => setActiveTab('profile')}>Perfil</button>
-        <button className={`nav-link ${activeTab === 'orders' ? 'active' : ''}`} onClick={() => setActiveTab('orders')}>Historial de Pedidos</button>
+      <h3>Perfil de Usuario</h3>
+      <div className="tabs">
+        <button onClick={() => setActiveTab('profile')}>Perfil</button>
+        <button onClick={() => setActiveTab('orders')}>Historial de Pedidos</button>
       </div>
-      {activeTab === 'profile' && renderProfile()}
-      {activeTab === 'orders' && renderOrderHistory()}
+      {activeTab === 'profile' ? renderProfile() : renderOrderHistory()}
     </div>
   );
 };
