@@ -79,21 +79,20 @@ const loginUsuario = async (req, res) => {
 
 // Middleware para verificar el token
 const verificarToken = (req, res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1]; // Obtener el token del encabezado Authorization
+    const token = req.headers['authorization']?.split(' ')[1]; // Obtener el token desde el encabezado Authorization
     if (!token) {
-        return res.status(403).json({ error: 'Token no proporcionado' });
+      return res.status(401).json({ error: 'Token no proporcionado' });
     }
-
+  
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        if (err) {
-            return res.status(401).json({ error: 'Token inválido' });
-        }
-        req.user = decoded; // Guardar la información del usuario decodificada en la solicitud
-        next();
+      if (err) {
+        return res.status(401).json({ error: 'Token inválido' });
+      }
+      req.user = decoded; // Guardar la información del usuario decodificada en la solicitud
+      next();
     });
-};
+  };
 
-module.exports = { verificarToken };
 
 // Obtener todos los usuarios (solo para admin)
 const obtenerUsuarios = async (req, res) => {
@@ -106,22 +105,22 @@ const obtenerUsuarios = async (req, res) => {
     }
 };
 
-const obtenerUsuario = (req, res) => {
+const obtenerUsuario = async (req, res) => {
     const { id } = req.user;  // Extraer el id del usuario desde el token
-
-    pool.query('SELECT id, nombre, email, rol FROM usuarios WHERE id = $1', [id], (error, result) => {
-        if (error) {
-            console.error('Error obteniendo usuario:', error);
-            return res.status(500).json({ error: 'Error obteniendo usuario' });
-        }
-        
-        if (result.rows.length === 0) {
-            return res.status(404).json({ error: 'Usuario no encontrado' });
-        }
-
-        res.json(result.rows[0]);
-    });
-};
+  
+    try {
+      const result = await pool.query('SELECT id, nombre, email, rol FROM usuarios WHERE id = $1', [id]);
+  
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Usuario no encontrado' });
+      }
+  
+      res.json(result.rows[0]);
+    } catch (error) {
+      console.error('Error obteniendo usuario:', error);
+      return res.status(500).json({ error: 'Error obteniendo usuario' });
+    }
+  };
 
 // Actualizar usuario
 const actualizarUsuario = async (req, res) => {
