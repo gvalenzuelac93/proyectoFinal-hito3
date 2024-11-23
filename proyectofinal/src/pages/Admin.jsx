@@ -166,20 +166,27 @@ const Admin = () => {
         </form>
       )}
       <h3>Lista de Productos</h3>
-      <ul className="list-group">
-        {products.map(product => (
-          <li key={product.id} className="list-group-item d-flex justify-content-between align-items-center">
-            <div>
-              <h5>{product.titulo}</h5>
-              <p>{product.descripcion}</p>
-              <p>Precio: ${product.precio}</p>
-              <p>Categoría: {product.categoria}</p>
-            </div>
-            <button className="btn btn-danger" onClick={() => handleDelete(product.id)}>Eliminar</button>
-          </li>
-        ))}
-      </ul>
-    </div>
+            <ul className="list-group">
+                {products.map(product => (
+                    <li key={product.id} className="list-group-item d-flex justify-content-between align-items-center">
+                        <div className="d-flex align-items-center">
+                            <img 
+                                src={product.imagen} 
+                                alt={product.titulo} 
+                                style={{ width: '50px', height: '50px', marginRight: '10px' }} // Ajusta el tamaño según sea necesario
+                            />
+                            <div>
+                                <h5>{product.titulo}</h5>
+                                <p>{product.descripcion}</p>
+                                <p>Precio: ${product.precio}</p>
+                                <p>Categoría: {product.categoria}</p>
+                            </div>
+                        </div>
+                        <button className="btn btn-danger" onClick={() => handleDelete(product.id)}>Eliminar</button>
+                    </li>
+                ))}
+            </ul>
+        </div>
   );
 };
 
