@@ -34,7 +34,7 @@ const PrivateRoute = ({ element, adminOnly }) => {
                     if (typeof setUser  === 'function') {
                         setUser (data); // Llama a setUser  solo si es una función
                     } else {
-                        console.error("setUser  no es una función");
+                        console.error("");
                     }
                 } else {
                     throw new Error("No se encontraron datos del usuario.");

@@ -59,7 +59,7 @@ const Navbar = () => {
             <li className="nav-item">
               <Link className="nav-link" to="/contacto">Contacto</Link>
             </li>
-            {user && user.role === 'admin' && (
+            {user && user.rol === 'admin' && ( // Agregar enlace solo si el usuario es admin
               <li className="nav-item">
                 <Link className="nav-link" to="/admin">Panel Admin</Link>
               </li>
@@ -74,7 +74,7 @@ const Navbar = () => {
                 </button>
                 <ul className="dropdown-menu dropdown-menu-end">
                   <li><Link className="dropdown-item" to="/profile">Perfil</Link></li>
-                  {user.role === 'admin' && (
+                  {user.rol === 'admin' && (
                     <li><Link className="dropdown-item" to="/admin">Panel Admin</Link></li>
                   )}
                   <li><hr className="dropdown-divider" /></li>
