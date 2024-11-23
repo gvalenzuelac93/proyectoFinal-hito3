@@ -81,24 +81,27 @@ const Admin = () => {
 
   const handleDelete = async (id) => {
     try {
-      const token = localStorage.getItem('token');
-      if (!token) throw new Error('No se encontró el token de autenticación');
-  
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/productos/delete/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+        const token = localStorage.getItem('token');
+        if (!token) throw new Error('No se encontró el token de autenticación');
 
-      if (!response.ok) throw new Error('Error al eliminar el producto');
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/productos/delete/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
 
-      setProducts(products.filter(product => product.id !== id));
-      alert('Producto eliminado exitosamente');
+        if (!response.ok) {
+            const errorData = await response.json(); // Obtener el mensaje de error del servidor
+            throw new Error(errorData.error || 'Error al eliminar el producto');
+        }
+
+        setProducts(products.filter(product => product.id !== id));
+        alert('Producto eliminado exitosamente');
     } catch (error) {
-      alert(error.message);
+        alert(error.message);
     }
-  };
+};
 
   useEffect(() => {
     const fetchProducts = async () => {
