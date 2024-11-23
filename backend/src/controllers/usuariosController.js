@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const jwt_decode = require('jwt-decode'); // Asegúrate de instalar esta dependencia
 
-
 // Registrar un nuevo usuario
 const registrarUsuario = async (req, res) => {
     const { nombre, email, contraseña, rol } = req.body;
@@ -14,11 +13,11 @@ const registrarUsuario = async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(contraseña, 10);
-        const newUser  = await pool.query(
+        const newUser = await pool.query(
             'INSERT INTO usuarios (nombre, email, contrasena, rol) VALUES ($1, $2, $3, $4) RETURNING *',
             [nombre, email, hashedPassword, rol || 'user']
         );
-        res.status(201).json(newUser .rows[0]);
+        res.status(201).json(newUser.rows[0]);
     } catch (error) {
         console.error('Error registrando usuario:', error);
         res.status(500).json({ error: 'Error registrando usuario' });
@@ -52,31 +51,31 @@ const loginUsuario = async (req, res) => {
 
         const { id, nombre, rol } = user.rows[0];
 
-        if (!JWT_SECRET) {
+        if (!process.env.JWT_SECRET) {
             console.error('JWT_SECRET no está definido');
             return res.status(500).json({ error: 'Error interno del servidor' });
         }
+
         console.log('JWT_SECRET:', process.env.JWT_SECRET);
+
         // Generar el token
         const token = jwt.sign({ id, nombre, rol, email }, process.env.JWT_SECRET, { expiresIn: '1h' });
-res.json({ token, user: { id, nombre, rol, email } });
 
-
-         // Enviar el token como cookie
-    res.cookie('token', token, {
-        httpOnly: true, // No accesible desde JavaScript
-        secure: process.env.NODE_ENV === 'production', // Solo HTTPS en producción
-        maxAge: 3600000, // 1 hora
-      });
+        // Enviar el token como cookie
+        res.cookie('token', token, {
+            httpOnly: true, // No accesible desde JavaScript
+            secure: process.env.NODE_ENV === 'production', // Solo HTTPS en producción
+            maxAge: 3600000, // 1 hora
+        });
 
         // Responder con el token y los datos del usuario
         res.json({ token, user: { id, nombre, rol, email } });
+
     } catch (error) {
         console.error('Error al iniciar sesión:', error.stack || error.message || error);
         res.status(500).json({ error: 'Error iniciando sesión' });
     }
 };
-
 
 // Middleware para verificar el token
 const verificarToken = (req, res, next) => {
@@ -85,7 +84,7 @@ const verificarToken = (req, res, next) => {
         return res.status(403).json({ error: 'Token no proporcionado' });
     }
 
-    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {  // Uso de process.env.JWT_SECRET
         if (err) {
             return res.status(401).json({ error: 'Token inválido' });
         }
