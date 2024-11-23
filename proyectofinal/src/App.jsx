@@ -27,7 +27,7 @@ function App() {
                         <Route path="/login" element={<Login />} />
                         <Route 
                 path="/admin" 
-                element={<PrivateRoute element={<Admin />} adminOnly={true} />} 
+                element={<PrivateRoute element={<Admin />} adminOnly/>} 
             />
                         <Route path="/register" element={<Register />} />
                         <Route path="/gallery" element={<ProductGallery />} />
