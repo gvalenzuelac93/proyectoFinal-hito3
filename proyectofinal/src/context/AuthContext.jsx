@@ -16,18 +16,15 @@ export const AuthProvider = ({ children }) => {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
-                if (!response.ok) throw new Error('Error al obtener los datos del usuario');
-                const data = await response.json();
-                setUser(data);  // Actualiza el estado con los datos del usuario
+                // Manejo de respuesta
             } catch (error) {
                 console.error(error);
-                setUser(null);  // Si no se puede obtener, se pone el usuario en null
+                setUser (null);
             }
         } else {
-            setUser(null);  // Si no hay token, el estado se pone en null
+            setUser (null);
         }
     };
-
     // Cuando el componente se monta, intentamos obtener los datos del usuario
     useEffect(() => {
         fetchUserData();  // Intenta obtener los datos del usuario cuando el componente se monta
