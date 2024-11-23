@@ -25,6 +25,7 @@ const SearchResults = () => {
             if (!response.ok) throw new Error('Error al buscar productos');
 
             const searchResults = await response.json();
+            console.log(searchResults);
             setResults(searchResults);
         } catch (err) {
             setError(`Error al buscar productos: ${err.message}`);
