@@ -1,7 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { fetchData } from "../services/api";
-
 const Admin = () => {
   const { user } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
@@ -42,7 +40,8 @@ const Admin = () => {
     }
   };
 
-  onst handleSubmit = async (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Datos del nuevo producto:', newProduct);
   
