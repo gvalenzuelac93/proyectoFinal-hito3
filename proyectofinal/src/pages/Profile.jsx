@@ -1,9 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { fetchData } from "../services/api";
 
 const Profile = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);  // Obtenemos los datos del usuario
   const [activeTab, setActiveTab] = useState('profile');
   const [orderHistory, setOrderHistory] = useState([]);
 
@@ -27,12 +26,12 @@ const Profile = () => {
     }
   };
 
-  // Llama a fetchOrderHistory cuando el componente se monta
+  // Llama a fetchOrderHistory cuando el componente se monta y el usuario está disponible
   useEffect(() => {
     if (user) {
       fetchOrderHistory();
     }
-  }, [user]);
+  }, [user]);  // Dependemos del 'user' para recargar los datos
 
   // Método para renderizar el historial de pedidos
   const renderOrderHistory = () => {
