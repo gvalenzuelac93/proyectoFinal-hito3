@@ -8,46 +8,48 @@ const PrivateRoute = ({ element, adminOnly }) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchUserData = async () => { // Cambiado a 'fetchUser Data'
+        const fetchUserData = async () => {
             const token = localStorage.getItem('token'); // Obtener el token del localStorage
-            if (token) {
-                try {
-                    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/usuarios/me`, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Bearer ${token}`, // Incluir el token en la cabecera
-                        },
-                    });
+            if (!token) {
+                setLoading(false);
+                return; // Si no hay token, no hacemos la solicitud
+            }
 
-                    if (!response.ok) {
-                        setError(`Error: ${response.statusText}`);
-                        setUser (null);
-                        return;
-                    }
+            try {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/usuarios/me`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Incluir el token en la cabecera
+                    },
+                });
 
-                    const data = await response.json(); // Obtener los datos del usuario
-                    if (data) {
-                        setUser (data); // Establecer los datos del usuario en el contexto
-                    } else {
-                        setError("No se encontraron datos del usuario.");
-                        setUser (null);
-                    }
-                } catch (error) {
-                    console.error("Error al obtener los datos del usuario:", error);
-                    setError("Hubo un problema al obtener los datos.");
+                if (!response.ok) {
+                    setError(`Error: ${response.statusText}`);
+                    setUser (null);
+                    return;
+                }
+
+                const data = await response.json();
+                if (data) {
+                    setUser (data);
+                } else {
+                    setError("No se encontraron datos del usuario.");
                     setUser (null);
                 }
-            } else {
-                setUser (null); // Si no hay token, establecer el usuario en null
+            } catch (error) {
+                console.error("Error al obtener los datos del usuario:", error);
+                setError("Hubo un problema al obtener los datos.");
+                setUser (null);
+            } finally {
+                setLoading(false);
             }
-            setLoading(false); // Cambiar el estado de carga a false
         };
 
-        fetchUserData(); // Llamar a la función para obtener los datos del usuario
+        fetchUserData();
     }, [setUser ]);
 
     if (loading) {
-        return <div>Cargando...</div>; // Mostrar un mensaje de carga mientras se obtienen los datos
+        return <div>Cargando...</div>;
     }
 
     if (error) {
