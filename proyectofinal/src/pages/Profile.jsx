@@ -67,28 +67,22 @@ const Profile = () => {
         )}
       </div>
     );
-};
+  };
+
   // Método para renderizar la información del perfil
   const renderProfile = () => {
+    if (!user) {
+      return <p>Cargando...</p>;  // Puedes mostrar un mensaje de carga mientras el usuario está siendo cargado
+    }
+
     return (
       <div>
         <h3>Información del Perfil</h3>
         <p><strong>Nombre:</strong> {user.nombre}</p>
         <p><strong>Email:</strong> {user.email}</p>
-        {/* Aquí puedes agregar campos para editar la información del perfil */}
       </div>
     );
   };
-
-  // Método para renderizar el cambio de contraseña
-  // const renderChangePassword = () => {
-  //   return (
-  //     <div>
-  //       <h3>Cambiar Contraseña</h3>
-  //       {/* Aquí puedes agregar un formulario para cambiar la contraseña */}
-  //     </div>
-  //   );
-  // };
 
   return (
     <div className="container mt-4">
@@ -96,11 +90,9 @@ const Profile = () => {
       <div className="nav nav-tabs" role="tablist">
         <button className={`nav-link ${activeTab === 'profile' ? 'active' : ''}`} onClick={() => setActiveTab('profile')}>Perfil</button>
         <button className={`nav-link ${activeTab === 'orders' ? 'active' : ''}`} onClick={() => setActiveTab('orders')}>Historial de Pedidos</button>
-         {/* <button className={`nav-link ${activeTab === 'changePassword' ? 'active' : ''}`} onClick={() => setActiveTab('changePassword')}>Cambiar Contraseña</button> */}
       </div>
       {activeTab === 'profile' && renderProfile()}
       {activeTab === 'orders' && renderOrderHistory()}
-      {/* {activeTab === 'changePassword' && renderChangePassword()} */}
     </div>
   );
 };
