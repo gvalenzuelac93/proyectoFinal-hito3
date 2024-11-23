@@ -84,7 +84,7 @@ const verificarToken = (req, res, next) => {
         return res.status(403).json({ error: 'Token no proporcionado' });
     }
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {  // Uso de process.env.JWT_SECRET
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
             return res.status(401).json({ error: 'Token inválido' });
         }
@@ -92,6 +92,8 @@ const verificarToken = (req, res, next) => {
         next();
     });
 };
+
+module.exports = { verificarToken };
 
 // Obtener todos los usuarios (solo para admin)
 const obtenerUsuarios = async (req, res) => {
@@ -104,22 +106,21 @@ const obtenerUsuarios = async (req, res) => {
     }
 };
 
-const obtenerUsuario = async (req, res) => {
-    try {
-        // Verificar si el usuario está autenticado a través del token
-        const userId = req.user.id; // 'req.user' debe contener los datos decodificados del JWT
+const obtenerUsuario = (req, res) => {
+    const { id } = req.user;  // Extraer el id del usuario desde el token
 
-        const result = await pool.query('SELECT id, nombre, email, rol FROM usuarios WHERE id = $1', [userId]);
-
+    pool.query('SELECT id, nombre, email, rol FROM usuarios WHERE id = $1', [id], (error, result) => {
+        if (error) {
+            console.error('Error obteniendo usuario:', error);
+            return res.status(500).json({ error: 'Error obteniendo usuario' });
+        }
+        
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Usuario no encontrado' });
         }
 
-        res.json(result.rows[0]); // Devuelve los datos del usuario
-    } catch (error) {
-        console.error('Error al obtener los datos del usuario:', error);
-        res.status(500).json({ error: 'Error al obtener los datos del usuario' });
-    }
+        res.json(result.rows[0]);
+    });
 };
 
 // Actualizar usuario
