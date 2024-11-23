@@ -3,9 +3,11 @@ import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 const PrivateRoute = ({ element, adminOnly }) => {
-    const { user, setUser } = useContext(AuthContext); // Asegúrate de que setUser sea una función
-    const [loading, setLoading] = useState(true); // Para manejar la carga de datos
-    const isAuthenticated = !!localStorage.getItem('token'); // Verificar si hay un token
+    const { user, setUser } = useContext(AuthContext);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null); // Para manejar el error
+
+    const isAuthenticated = !!localStorage.getItem('token');
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -14,51 +16,56 @@ const PrivateRoute = ({ element, adminOnly }) => {
                 try {
                     const response = await fetch(`${import.meta.env.VITE_API_URL}/api/usuarios/me`, {
                         method: 'GET',
-                        headers: { 'Authorization': `Bearer ${token}` },
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                        },
                     });
 
-                    if (response.ok) {
-                        const data = await response.json();
-                        setUser(data); // Asegúrate de actualizar el estado del contexto
+                    if (!response.ok) {
+                        setError(`Error: ${response.statusText}`);
+                        setUser(null);
+                        return;
+                    }
+
+                    const data = await response.json();
+                    if (data) {
+                        setUser(data);
                     } else {
-                        console.error("Error al obtener los datos del usuario. Status:", response.status);
+                        setError("No se encontraron datos del usuario.");
                         setUser(null);
                     }
                 } catch (error) {
                     console.error("Error al obtener los datos del usuario:", error);
+                    setError("Hubo un problema al obtener los datos.");
                     setUser(null);
                 } finally {
-                    setLoading(false); // Termina la carga
+                    setLoading(false);
                 }
             };
 
             fetchUserData();
         } else {
             setUser(null);
-            setLoading(false); // Si no hay token, termina la carga también
+            setLoading(false);
         }
-    }, [setUser]); // Solo se ejecuta cuando el componente se monta
+    }, [setUser]);
 
-    // Si está cargando los datos del usuario, muestra un loader o espera
     if (loading) {
-        return <div>Loading...</div>; // Puedes personalizar el loading
+        return <div>Loading...</div>;
     }
 
-    console.log("Usuario autenticado:", isAuthenticated);
-    console.log("Datos del usuario:", user);
+    if (error) {
+        return <div>{error}</div>; // Mostrar el error si lo hay
+    }
 
-    // Si el usuario no está autenticado, redirigir a login
     if (!isAuthenticated || !user) {
         return <Navigate to="/login" />;
     }
 
-    // Si es una ruta admin y el usuario no es admin, redirigir a la página principal
     if (adminOnly && user.rol !== 'admin') {
-        console.log("Acceso denegado: usuario no es admin");
         return <Navigate to="/" />;
     }
 
-    // Si está autenticado y tiene el rol adecuado, renderizar el componente
     return element;
 };
 
