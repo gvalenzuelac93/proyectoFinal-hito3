@@ -149,8 +149,7 @@ const eliminarImagen = async (req, res) => {
 
 // Buscar productos
 const buscarProductos = async (req, res) => {
-    const { q } = req.query; // Obtener el término de búsqueda desde los parámetros de consulta
-    console.log('Consulta de búsqueda:', q); // Verifica el valor de 'q'
+    const { q } = req.query;
 
     if (!q) {
         return res.status(400).json({ error: 'Se requiere un término de búsqueda' });
@@ -158,11 +157,19 @@ const buscarProductos = async (req, res) => {
 
     try {
         const result = await pool.query(
-            'SELECT * FROM productos WHERE titulo ILIKE $1 OR descripcion ILIKE $1',
+            `SELECT p.*, i.url AS imagen_url 
+             FROM productos p 
+             LEFT JOIN imagenesproductos i ON p.id = i.producto_id 
+             WHERE p.titulo ILIKE $1 OR p.descripcion ILIKE $1`,
             [`%${q}%`]
         );
-        console.log('Resultados de búsqueda:', result.rows); // Verifica los resultados
-        res.json(result.rows);
+
+        const productos = result.rows.map(producto => ({
+            ...producto,
+            imagen: producto.imagen_url // Asegúrate de que esta propiedad se llama 'imagen'
+        }));
+
+        res.json(productos);
     } catch (error) {
         console.error('Error buscando productos:', error);
         res.status(500).json({ error: 'Error buscando productos' });
