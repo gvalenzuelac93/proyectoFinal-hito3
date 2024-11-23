@@ -38,13 +38,17 @@ export const AuthProvider = ({ children }) => {
         setUser (null);
     };
 
+    const login = (userData) => {
+        setUser (userData); // Actualiza el estado del usuario
+    };
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         fetchUserData(token); // Llama a la función para obtener datos del usuario al montar el componente
     }, [fetchUserData]);
 
     return (
-        <AuthContext.Provider value={{ user, setToken, logout }}>
+        <AuthContext.Provider value={{ user, setToken, logout, login }}>
             {children}
         </AuthContext.Provider>
     );
