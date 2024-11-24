@@ -110,7 +110,10 @@ const eliminarProducto = async (req, res) => {
             return res.status(400).json({ error: 'El ID debe ser un número' });
         }
 
-        // Intenta eliminar el producto
+        // Primero, eliminar las imágenes asociadas
+        await pool.query('DELETE FROM imagenesproductos WHERE producto_id = $1', [idNumber]);
+
+        // Ahora, intenta eliminar el producto
         const result = await pool.query('DELETE FROM productos WHERE id = $1', [idNumber]);
         if (result.rowCount === 0) {
             return res.status(404).json({ error: 'Producto no encontrado' });
