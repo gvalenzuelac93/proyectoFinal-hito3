@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ProductGallery from './ProductGallery';
 import { fetchData } from '../services/api';
+import ProductCard  from '../components/ProductCard';
 
 const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
