@@ -4,7 +4,7 @@ import './ProductGallery.css';
 import ProductCard from '../components/ProductCard';
 import { fetchData } from "../services/api";
 
-const ProductGallery = ({ limit }) => {
+const ProductGallery = ({ limit = 6 }) => { // Establecer un valor predeterminado para el límite
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -53,11 +53,14 @@ const ProductGallery = ({ limit }) => {
         return <div>Error: Los productos no se cargaron correctamente.</div>;
     }
 
+    // Limitar los productos a mostrar
+    const limitedProducts = products.slice(0, limit); // Solo tomar los primeros 'limit' productos
+
     return (
         <div className='container'>
             <div className="product-gallery">
                 <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                    {products.map((product) => (
+                    {limitedProducts.map((product) => (
                         <div className="col" key={product.id}>
                             <ProductCard product={product} />
                         </div>
