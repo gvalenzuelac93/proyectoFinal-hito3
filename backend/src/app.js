@@ -10,11 +10,11 @@ const ordenesRoutes = require('./routes/ordenes');
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors({
-    origin: 'https://sarangshop.netlify.app', // Permitir solo este origen
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
-    credentials: true, // 
-}));
+// app.use(cors({
+//     origin: 'https://sarangshop.netlify.app', // Permitir solo este origen
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+//     credentials: true, // 
+// }));
 app.use(express.json({ limit: '10mb' })); 
 app.use(cookieParser());
 app.use(express.urlencoded({ limit: '10mb', extended: true })); // Para formularios
