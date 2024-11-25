@@ -4,7 +4,7 @@ import './ProductGallery.css';
 import ProductCard from '../components/ProductCard';
 import { fetchData } from "../services/api";
 
-const ProductGallery = ({ limit }) => {
+const ProductGallery = () => { // Eliminar el parámetro 'limit'
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -29,7 +29,7 @@ const ProductGallery = ({ limit }) => {
         };
 
         fetchProducts();
-    }, [limit]);
+    }, []);
 
     if (loading) {
         return (
@@ -57,7 +57,7 @@ const ProductGallery = ({ limit }) => {
         <div className='container'>
             <div className="product-gallery">
                 <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                    {products.map((product) => (
+                    {products.map((product) => ( // Mostrar todos los productos
                         <div className="col" key={product.id}>
                             <ProductCard product={product} />
                         </div>
