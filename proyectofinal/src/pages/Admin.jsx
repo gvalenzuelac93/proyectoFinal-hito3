@@ -165,7 +165,7 @@ const Admin = () => {
             required 
             className="form-control mb-2"
           />
-          <button type="submit" className="btn btn-success">Agregar Producto</button>
+          <button type="submit" className="btn mi-boton">Agregar Producto</button>
         </form>
       )}
       <h3>Lista de Productos</h3>

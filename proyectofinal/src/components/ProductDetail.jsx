@@ -39,7 +39,7 @@ const ProductDetail = () => {
         precio: parseFloat(product.precio),
         cantidad: 1
       });
-      alert('Producto agregado al carrito');
+     
     }
   };
 
