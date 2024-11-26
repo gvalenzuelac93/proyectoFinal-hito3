@@ -35,9 +35,10 @@ const ProductDetail = () => {
     if (product) {
       addToCart({
         id: product.id,
-        titulo: product.titulo,
-        precio: parseFloat(product.precio),
-        cantidad: 1
+            titulo: product.titulo,
+            precio: parseFloat(product.precio),
+            cantidad: 1,
+            imagen: product.imagenes[0]?.url || 'ruta/a/imagen/predeterminada.jpg'
       });
      
     }

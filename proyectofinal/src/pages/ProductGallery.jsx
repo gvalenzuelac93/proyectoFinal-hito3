@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ProductGallery.css';
 import ProductCard from '../components/ProductCard';
-import { fetchData } from "../services/api";
 
-const ProductGallery = () => { // Eliminar el parámetro 'limit'
+const ProductGallery = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -30,6 +29,15 @@ const ProductGallery = () => { // Eliminar el parámetro 'limit'
 
         fetchProducts();
     }, []);
+
+    // Función para truncar la descripción
+    const truncateDescription = (description, maxLength) => {
+        if (!description) return ''; // Maneja el caso donde la descripción puede ser null o undefined
+        if (description.length > maxLength) {
+            return description.substring(0, maxLength) + '...'; // Agrega '...' si se recorta
+        }
+        return description;
+    };
 
     if (loading) {
         return (
@@ -57,9 +65,14 @@ const ProductGallery = () => { // Eliminar el parámetro 'limit'
         <div className='container'>
             <div className="product-gallery">
                 <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                    {products.map((product) => ( // Mostrar todos los productos
+                    {products.map((product) => (
                         <div className="col" key={product.id}>
-                            <ProductCard product={product} />
+                            <ProductCard 
+                                product={{
+                                    ...product,
+                                    descripcion: truncateDescription(product.descripcion, 150) // Limitar a 100 caracteres
+                                }} 
+                            />
                         </div>
                     ))}
                 </div>

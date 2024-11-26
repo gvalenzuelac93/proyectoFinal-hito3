@@ -35,7 +35,8 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         localStorage.removeItem('token');
-        setUser (null);
+    localStorage.removeItem('cart'); // Limpiar el carrito al cerrar sesión
+    setUser (null);
     };
 
     const login = (userData) => {

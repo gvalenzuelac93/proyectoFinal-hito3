@@ -1,83 +1,26 @@
-import React, { useContext, useMemo, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { fetchData } from "../services/api";
-const BASE_URL = import.meta.env.VITE_API_URL;
 
 const Cart = () => {
-    const { cart, removeFromCart, clearCart, updateQuantity } = useContext(CartContext);
+    const { cart, removeFromCart } = useContext(CartContext);
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
     const [totalPrice, setTotalPrice] = useState(0);
-    const [isProcessingOrder, setIsProcessingOrder] = useState(false);
 
     useEffect(() => {
-      const calculateTotal = () => {
-          const total = cart.reduce((acc, item) => {
-              return acc + (item.precio * item.cantidad); // Multiplica el precio por la cantidad
-          }, 0);
-          setTotalPrice(total);
-      };
-  
-      calculateTotal();
-  }, [cart]);
-
-  const handleProceedToCheckout = async () => {
-    if (!user) {
-        alert('Por favor, inicia sesión para continuar con la compra');
-        navigate('/login');
-    } else {
-        setIsProcessingOrder(true);
-        const orderData = {
-            items: cart,
-            total: totalPrice,
+        const calculateTotal = () => {
+            const total = cart.reduce((acc, item) => {
+                return acc + (item.precio * item.cantidad);
+            }, 0);
+            setTotalPrice(total);
         };
 
-        try {
-            const token = localStorage.getItem('token');
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/ordenes`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify(orderData),
-            });
+        calculateTotal();
+    }, [cart]);
 
-            if (!response.ok) throw new Error('Error al procesar la orden');
-
-            const order = await response.json();
-            alert(`Orden procesada exitosamente. ID: ${order.id}`);
-            clearCart(); // Limpiar el carrito después de la compra
-
-            // Redirigir a la página de perfil y abrir la pestaña de historial de pedidos
-            navigate('/profile');
-            // Aquí podrías usar un contexto o un estado global para indicar que se debe mostrar el historial de pedidos
-            // Por ejemplo, si tienes un contexto de ordenes, podrías actualizarlo aquí.
-
-        } catch (error) {
-            alert(error.message);
-        } finally {
-            setIsProcessingOrder(false);
-        }
-    }
-};
-
-    // Funciones para aumentar y disminuir la cantidad
-    const increaseQuantity = (id) => {
-        const item = cart.find(item => item.id === id);
-        if (item) {
-            updateQuantity(id, item.cantidad + 1);
-        }
-    };
-
-    const decreaseQuantity = (id) => {
-        const item = cart.find(item => item.id === id);
-        if (item && item.cantidad > 1) {
-            updateQuantity(id, item.cantidad - 1);
-        }
-    };
+    console.log("Contenido del carrito:", cart); // Verifica el contenido del carrito
 
     return (
         <div className="container mt-4">
@@ -88,26 +31,32 @@ const Cart = () => {
                 </div>
             ) : (
                 <>
-                    {cart.map((item) => (
-                        <div key={item.id} className="card mb-3">
-                            <div className="card-body">
-                                <h5 className="card-title">{item.titulo}</h5>
-                                <p className="card-text">Precio: ${Number(item.precio).toFixed(2)}</p>
-                                <div className="d-flex align-items-center">
-                                    <button className="btn btn-secondary me-2" onClick={() => decreaseQuantity(item.id)}>-</button>
-                                    <span>{item.cantidad}</span>
-                                    <button className="btn btn-secondary ms-2" onClick={() => increaseQuantity(item.id)}>+</button>
+                    {cart.map((item) => {
+                        const imagenUrl = item.imagen || 'ruta/a/imagen/predeterminada.jpg'; // Usa la imagen que se guardó en el carrito
+                        console.log("Imagen URL:", imagenUrl); // Verifica la URL de la imagen
+                        return (
+                            <div key={item.id} className="card mb-3">
+                                <div className="card-body d-flex align-items-center">
+                                    <img 
+                                        src={imagenUrl} 
+                                        alt={item.titulo} 
+                                        style={{ width: '100px', height: '100px', marginRight: '10px' }} // Ajusta el tamaño según sea necesario
+                                    />
+                                    <div className="flex-grow-1">
+                                        <h5 className="card-title">{item.titulo}</h5>
+                                        <p className="card-text">Precio: ${Number(item.precio).toFixed(2)}</p>
+                                        <div className="d-flex align-items-center">
+                                            <span>Cantidad: {item.cantidad}</span>
+                                            <button className="btn btn-danger mt-2 ms-2" onClick={() => removeFromCart(item.id)}>Eliminar</button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <button className="btn btn-danger mt-2" onClick={() => removeFromCart(item.id)}>Eliminar</button>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                     <div className="card mt-3">
                         <div className="card-body">
                             <h5 className="card-title">Total: ${totalPrice.toFixed(2)}</h5>
-                            <button className="btn btn-primary" onClick={handleProceedToCheckout} disabled={isProcessingOrder}>
-                                {isProcessingOrder ? 'Procesando...' : 'Proceder al Pago'}
-                            </button>
                         </div>
                     </div>
                 </>
