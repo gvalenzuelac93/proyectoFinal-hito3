@@ -1,88 +1,95 @@
 body {
-    background-color: #B19CD9;
-    font-family: "Varela Round", sans-serif !important;
- 
-
-  }
-
-  
-  .navbar {
-    margin-bottom: 20px;
-  }
-  
-  .card {
-    height: 100%;
-  }
-  
-  .card-title {
-    font-size: 1.25rem;
-  }
-  
-  .card-text {
-    color: #6c757d;
-  }
+  background: linear-gradient(135deg, #b19cd9, #ffb6c1);
+  font-family: "Varela Round", sans-serif !important;
+  color: #333;
+  margin: 0;
+}
 
 .navbar {
-    padding: 0.5rem 1rem;
-  }
-  
-  .navbar-brand {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  
-  .navbar-brand img {
-    transition: transform 0.3s ease;
-  }
-  
-  .navbar-brand:hover img {
-    transform: scale(1.1);
-  }
-  
-  
-  .nav-link {
-    padding: 0.5rem 1rem;
-    transition: color 0.3s ease;
-    color: white;
-  }
-  
-  .nav-link:hover {
-    color: #ffc107 !important;
-  }
-  
- 
-  .form-control:focus {
-    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
-    border-color: #ffc107;
-  }
-  
-  
-  .dropdown-menu {
-    border: none;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-  }
-  
-  .dropdown-item {
-    padding: 0.5rem 1rem;
-    transition: background-color 0.3s ease;
-  }
-  
-  .dropdown-item:hover {
-    background-color: #f8f9fa;
-  }
-  
-@media (min-width: 992px) {
-  .navbar-nav {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    
-  }
+  background-color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
 }
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #b19cd9 !important;
+}
+
+.navbar-brand img {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0.9;
+}
+
+.navbar-brand:hover img {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+.nav-link {
+  padding: 0.5rem 1rem;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+  color: #333 !important;
+}
+
+.nav-link:hover {
+  color: #ffc107 !important;
+  text-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+}
+
+.card {
+  height: 100%;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #b19cd9;
+  margin-bottom: 0.5rem;
+}
+
+.card-text {
+  color: #6c757d;
+  line-height: 1.6;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.5);
+  border-color: #ffc107;
+}
+
+.dropdown-menu {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-item {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #b19cd9;
+  color: #ffffff;
+}
+
 .site-header {
-  background-color: #FFB6C1;
+  background-color: #ffffff;
   padding: 1rem 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .logo-link {
@@ -92,31 +99,32 @@ body {
 
 .logo-img {
   max-height: 80px;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0.9;
 }
 
 .logo-img:hover {
   transform: scale(1.1);
+  opacity: 1;
 }
 
 .site-title {
   font-size: 2.5rem;
-  color: #333;
+  color: #b19cd9;
   margin: 0;
-  
 }
 
 @media (max-width: 768px) {
   .site-header .row {
     flex-direction: column;
   }
-  
+
   .site-header .col-md-4,
   .site-header .col-md-8 {
     width: 100%;
     text-align: center;
   }
-  
+
   .site-title {
     margin-top: 1rem;
     font-size: 2rem;
@@ -124,13 +132,18 @@ body {
 }
 
 .mi-boton {
-  background-color: #B19CD9 !important; 
-  color: black !important; 
-  border-color: #F2F2F2 !important;
-  transition: background-color 0.3s ease!important;
+  background-color: #b19cd9 !important;
+  color: white !important;
+  border: 2px solid transparent;
+  padding: 0.8rem 1.6rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 12px;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .mi-boton:hover {
-  background-color: #ffb6c1 !important; 
+  background-color: #ffb6c1 !important;
+  transform: scale(1.05);
 }
-
