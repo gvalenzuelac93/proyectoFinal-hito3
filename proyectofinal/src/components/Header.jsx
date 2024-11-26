@@ -15,9 +15,13 @@ const Header = () => {
               />
             </Link>
           </div>
-          <div className="col-md-8">
-            <h1 className="site-title">Sarang Shop 💕🎵</h1>
-          </div>
+          <div className="col-md-8 text-center">
+  <h1 className="site-title">
+    <span className="highlight">Sarang Shop</span> 💕🎵
+  </h1>
+  <p className="subtitle">Tu rincón para el K-pop y anime</p>
+</div>
+
         </div>
       </div>
     </header>
