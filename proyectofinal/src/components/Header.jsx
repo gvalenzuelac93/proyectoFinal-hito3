@@ -15,7 +15,7 @@ const Header = () => {
               />
             </Link>
           </div>
-          <div className="col-md-8 text-center">
+          <div className="col-md-8">
   <h1 className="site-title">
     <span className="highlight">Sarang Shop</span> 💕🎵
   </h1>
