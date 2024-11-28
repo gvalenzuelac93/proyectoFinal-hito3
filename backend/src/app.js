@@ -11,7 +11,7 @@ const ordenesRoutes = require('./routes/ordenes');
 const app = express();
 app.use(bodyParser.json());
 app.use(cors({
-    origin: 'http://localhost:5173', // Permitir solo este origen
+    origin: 'https://sarangshop.netlify.app', // Permitir solo este origen
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
     credentials: true, // 
 }));
