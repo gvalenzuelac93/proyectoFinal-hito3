@@ -22,7 +22,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: true })); // Para formular
 
 // Rutas
 app.use('/api/usuarios', usuariosRoutes);
-app.use('/api/productos', productosRoutes); // Asegúrate de que esta línea esté correcta
+app.use('/api/productos', productosRoutes); 
 app.use('/api/carrito', carritoRoutes);
 app.use('/api/imagenesproductos', imagenesProductosRoutes);
 app.use('/api/ordenes', ordenesRoutes);
