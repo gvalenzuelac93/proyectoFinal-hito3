@@ -22,6 +22,11 @@ const Cart = () => {
     }, [cart]);
 
     const handleCreateOrder = async () => {
+        if (!user) {
+            setNotification('Debes iniciar sesión para crear una orden.');
+            return;
+        }
+
         if (cart.length === 0) {
             setNotification('No puedes crear una orden con un carrito vacío.');
             return;
