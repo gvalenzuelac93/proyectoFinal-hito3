@@ -91,6 +91,8 @@ const obtenerOrdenPorId = async (req, res) => {
 const obtenerOrdenesDelUsuario = async (req, res) => {
     const userId = req.user.id; // Asegúrate de que estás obteniendo el ID del usuario autenticado
 
+    console.log('ID del usuario:', userId); // Agrega este log para ver si el ID se obtiene correctamente
+
     if (!userId) {
         return res.status(400).json({ error: 'ID de usuario no proporcionado' });
     }
@@ -98,6 +100,8 @@ const obtenerOrdenesDelUsuario = async (req, res) => {
     try {
         const result = await pool.query('SELECT * FROM ordenes WHERE user_id = $1', [userId]);
         const ordenes = result.rows;
+
+        console.log('Órdenes obtenidas:', ordenes); // Agrega este log para ver las órdenes obtenidas
 
         // Obtener los productos de cada orden
         for (const orden of ordenes) {

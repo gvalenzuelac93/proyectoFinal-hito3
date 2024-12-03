@@ -6,16 +6,16 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState('profile');
   const [orderHistory, setOrderHistory] = useState([]);
   const [notification, setNotification] = useState('');
-  
+
   const fetchOrderHistory = async () => {
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/ordenes/usuario`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        });
+        const response = await fetch('https://proyectofinal-hito3.onrender.com/api/ordenes/usuario', {
+    method: 'GET',
+    headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`, // Asegúrate de que el token se esté enviando
+    },
+});
 
         if (!response.ok) {
             throw new Error('Error al obtener el historial de pedidos: ' + response.statusText);
