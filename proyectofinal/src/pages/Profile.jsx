@@ -16,12 +16,15 @@ const Profile = () => {
             },
         });
 
-        if (!response.ok) throw new Error('Error al obtener el historial de pedidos');
+        if (!response.ok) {
+            throw new Error('Error al obtener el historial de pedidos: ' + response.statusText);
+        }
 
         const data = await response.json();
         setOrderHistory(data);
     } catch (error) {
         console.error(error);
+        setNotification(error.message); // Mostrar el error al usuario
     }
 };
 
