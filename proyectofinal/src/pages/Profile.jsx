@@ -5,7 +5,8 @@ const Profile = () => {
   const { user } = useContext(AuthContext);  // Obtenemos los datos del usuario
   const [activeTab, setActiveTab] = useState('profile');
   const [orderHistory, setOrderHistory] = useState([]);
-
+  const [notification, setNotification] = useState('');
+  
   const fetchOrderHistory = async () => {
     try {
         const token = localStorage.getItem('token');
