@@ -9,7 +9,7 @@ router.post('/', verificarToken, crearOrden); // Asegúrate de que la ruta esté
 // Ruta para obtener todas las órdenes
 router.get('/', obtenerOrdenes);
 
-router.get('/ordenes/usuario', verificarToken, obtenerOrdenesDelUsuario);
+router.get('/usuario', verificarToken, obtenerOrdenesDelUsuario);
 
 
 // Ruta para obtener una orden específica por ID
