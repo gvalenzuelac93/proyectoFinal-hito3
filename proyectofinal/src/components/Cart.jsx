@@ -26,29 +26,31 @@ const Cart = () => {
             setNotification('Debes iniciar sesión para crear una orden.');
             return;
         }
-
+    
         if (cart.length === 0) {
             setNotification('No puedes crear una orden con un carrito vacío.');
             return;
         }
-
+    
         try {
-            const response = await fetch('/api/ordenes', {
+            const response = await fetch('https://proyectofinal-hito3.onrender.com/api/ordenes', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // Agrega el token de autenticación si es necesario
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`, // Asegúrate de que el token se esté enviando
                 },
                 body: JSON.stringify({
                     items: cart,
                     total: totalPrice,
                 }),
             });
-
+    
             if (!response.ok) {
-                throw new Error('Error al crear la orden');
+                const errorData = await response.json();
+                throw new Error(`Error al crear la orden: ${errorData.error || response.statusText}`);
             }
-
+    
+            const data = await response.json();
             setNotification('Orden creada exitosamente.');
             // Aquí puedes redirigir o limpiar el carrito si es necesario
         } catch (error) {

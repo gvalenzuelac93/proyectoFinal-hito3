@@ -4,7 +4,7 @@ const verificarToken = require('../middleware/auth');
 const router = express.Router();
 
 // Ruta para crear una nueva orden
-router.post('/', crearOrden);
+router.post('/', verificarToken, crearOrden); // Asegúrate de que la ruta esté protegida
 
 // Ruta para obtener todas las órdenes
 router.get('/', obtenerOrdenes);

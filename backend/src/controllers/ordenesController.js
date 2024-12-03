@@ -2,7 +2,7 @@ const pool = require('../config/db');
 
 // Crear una nueva orden
 const crearOrden = async (req, res) => {
-    const { items, total } = req.body; // Asegúrate de que estás enviando estos datos
+    const { items, total } = req.body;
 
     if (!items || items.length === 0) {
         return res.status(400).json({ error: 'Se requieren items para crear la orden' });
@@ -25,7 +25,7 @@ const crearOrden = async (req, res) => {
             );
         }
 
-        res.status(201).json({ id: ordenId, total }); // Responder con el ID de la orden y el total
+        res.status(201).json({ id: ordenId, total });
     } catch (error) {
         console.error('Error al crear la orden:', error);
         res.status(500).json({ error: 'Error al procesar la orden' });
