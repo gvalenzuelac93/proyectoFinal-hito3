@@ -8,22 +8,22 @@ const Profile = () => {
 
   const fetchOrderHistory = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/ordenes`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/ordenes/usuario`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
 
-      if (!response.ok) throw new Error('Error al obtener el historial de pedidos');
+        if (!response.ok) throw new Error('Error al obtener el historial de pedidos');
 
-      const data = await response.json();
-      setOrderHistory(data);
+        const data = await response.json();
+        setOrderHistory(data);
     } catch (error) {
-      console.error(error);
+        console.error(error);
     }
-  };
+};
 
   useEffect(() => {
     if (user) {

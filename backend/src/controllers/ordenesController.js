@@ -81,10 +81,36 @@ const obtenerOrdenPorId = async (req, res) => {
         res.status(500).json({ error: 'Error obteniendo la orden' });
     }
 };
+// Obtener las órdenes del usuario autenticado
+const obtenerOrdenesDelUsuario = async (req, res) => {
+    const userId = req.user.id; // Asegúrate de que estás obteniendo el ID del usuario autenticado
+
+    try {
+        const result = await pool.query('SELECT * FROM ordenes WHERE user_id = $1', [userId]);
+        const ordenes = result.rows;
+
+        // Obtener los productos de cada orden
+        for (const orden of ordenes) {
+            const productosResult = await pool.query(
+                `SELECT io.*, p.titulo FROM itemsorden io
+                 JOIN productos p ON io.producto_id = p.id
+                 WHERE io.orden_id = $1`,
+                [orden.id]
+            );
+            orden.productos = productosResult.rows; // Agregar los productos a la orden
+        }
+
+        res.json(ordenes);
+    } catch (error) {
+        console.error('Error obteniendo órdenes del usuario:', error);
+        res.status(500).json({ error: 'Error obteniendo órdenes' });
+    }
+};
 
 // Exportar las funciones
 module.exports = {
     crearOrden,
     obtenerOrdenes,
+    obtenerOrdenesDelUsuario,
     obtenerOrdenPorId,
 };
