@@ -60,8 +60,14 @@ const obtenerOrdenes = async (req, res) => {
 const obtenerOrdenPorId = async (req, res) => {
     const { id } = req.params;
 
+    // Verificar que el ID es un número entero
+    const ordenId = parseInt(id, 10);
+    if (isNaN(ordenId)) {
+        return res.status(400).json({ error: 'ID de orden inválido' });
+    }
+
     try {
-        const result = await pool.query('SELECT * FROM ordenes WHERE id = $1', [id]);
+        const result = await pool.query('SELECT * FROM ordenes WHERE id = $1', [ordenId]);
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Orden no encontrada' });
         }
