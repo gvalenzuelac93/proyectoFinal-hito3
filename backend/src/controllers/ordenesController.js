@@ -3,7 +3,9 @@ const pool = require('../config/db');
 // Crear una nueva orden
 const crearOrden = async (req, res) => {
     const { items, total } = req.body;
+    const userId = req.user.id; // Obtener el ID del usuario desde el token
 
+    // Validar que haya items
     if (!items || items.length === 0) {
         return res.status(400).json({ error: 'Se requieren items para crear la orden' });
     }
@@ -11,8 +13,8 @@ const crearOrden = async (req, res) => {
     try {
         // Insertar la orden en la tabla 'ordenes'
         const result = await pool.query(
-            'INSERT INTO ordenes (total) VALUES ($1) RETURNING *',
-            [total]
+            'INSERT INTO ordenes (usuario_id, total, fecha_creacion, estado) VALUES ($1, $2, NOW(), $3) RETURNING *',
+            [userId, total, 'pendiente'] // Asigna un estado inicial, por ejemplo 'pendiente'
         );
 
         const ordenId = result.rows[0].id; // Obtener el ID de la nueva orden
@@ -25,6 +27,7 @@ const crearOrden = async (req, res) => {
             );
         }
 
+        // Responder con la orden creada
         res.status(201).json({ id: ordenId, total });
     } catch (error) {
         console.error('Error al crear la orden:', error);
@@ -89,19 +92,17 @@ const obtenerOrdenPorId = async (req, res) => {
 };
 // Obtener las órdenes del usuario autenticado
 const obtenerOrdenesDelUsuario = async (req, res) => {
-    const userId = req.user.id; // Asegúrate de que estás obteniendo el ID del usuario autenticado
+    const userId = req.user.id; // Obtener el ID del usuario desde el token
 
-    console.log('ID del usuario:', userId); // Agrega este log para ver si el ID se obtiene correctamente
-
+    // Verificar que el ID del usuario esté disponible
     if (!userId) {
         return res.status(400).json({ error: 'ID de usuario no proporcionado' });
     }
 
     try {
-        const result = await pool.query('SELECT * FROM ordenes WHERE user_id = $1', [userId]);
+        // Obtener las órdenes del usuario autenticado
+        const result = await pool.query('SELECT * FROM ordenes WHERE usuario_id = $1', [userId]);
         const ordenes = result.rows;
-
-        console.log('Órdenes obtenidas:', ordenes); // Agrega este log para ver las órdenes obtenidas
 
         // Obtener los productos de cada orden
         for (const orden of ordenes) {
