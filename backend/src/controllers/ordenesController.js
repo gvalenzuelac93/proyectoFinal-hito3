@@ -27,11 +27,23 @@ const crearOrden = async (req, res) => {
             );
         }
 
+        // Vaciar el carrito del usuario
+        await eliminarItemsDelCarrito(userId); // Llama a la función para vaciar el carrito
+
         // Responder con la orden creada
         res.status(201).json({ id: ordenId, total });
     } catch (error) {
         console.error('Error al crear la orden:', error);
         res.status(500).json({ error: 'Error al procesar la orden' });
+    }
+};
+
+// Función para eliminar todos los items del carrito del usuario
+const eliminarItemsDelCarrito = async (usuarioId) => {
+    try {
+        await pool.query('DELETE FROM itemcarrito WHERE carrito_id = (SELECT id FROM carritos WHERE usuario_id = $1)', [usuarioId]);
+    } catch (error) {
+        console.error('Error al vaciar el carrito:', error);
     }
 };
 
